@@ -39,8 +39,10 @@ CREATE TABLE IF NOT EXISTS `sixt_development`.`vehicles` (
   `year` INT NOT NULL,
   `vin` VARCHAR(45) NOT NULL,
   `body` ENUM('sedan', 'hatchback', 'wagon', 'coupe', 'convertible', 'roadster', 'suv', 'crossover', 'pickup', 'van', 'minivan', 'truck', 'camper') NOT NULL DEFAULT 'sedan',
+  `plate` VARCHAR(15) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `vin_UNIQUE` (`vin` ASC) VISIBLE)
+  UNIQUE INDEX `vin_UNIQUE` (`vin` ASC) VISIBLE,
+  UNIQUE INDEX `plate_UNIQUE` (`plate` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
