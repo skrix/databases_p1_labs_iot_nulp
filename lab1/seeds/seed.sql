@@ -4,17 +4,17 @@ USE `sixt_development`;
 -- Disable foreign key checks for easier insertion
 SET FOREIGN_KEY_CHECKS=0;
 
--- Clear existing data (optional - uncomment if you want to reset)
--- TRUNCATE TABLE `fines_payments`;
--- TRUNCATE TABLE `rentings_payments`;
--- TRUNCATE TABLE `rentings_fines`;
--- TRUNCATE TABLE `rentings`;
--- TRUNCATE TABLE `parkings_vehicles`;
--- TRUNCATE TABLE `fines`;
--- TRUNCATE TABLE `payments`;
--- TRUNCATE TABLE `users`;
--- TRUNCATE TABLE `vehicles`;
--- TRUNCATE TABLE `parkings`;
+-- Clear existing data
+TRUNCATE TABLE `fines_payments`;
+TRUNCATE TABLE `rentings_payments`;
+TRUNCATE TABLE `rentings_fines`;
+TRUNCATE TABLE `rentings`;
+TRUNCATE TABLE `parkings_vehicles`;
+TRUNCATE TABLE `fines`;
+TRUNCATE TABLE `payments`;
+TRUNCATE TABLE `users`;
+TRUNCATE TABLE `vehicles`;
+TRUNCATE TABLE `parkings`;
 
 -- Insert Parkings (Ukrainian cities)
 INSERT INTO `parkings` (`address`, `country`, `city`, `latitude`, `longitude`) VALUES
