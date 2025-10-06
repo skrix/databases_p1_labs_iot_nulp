@@ -25,7 +25,10 @@ CREATE TABLE IF NOT EXISTS `sixt_development`.`parkings` (
   `latitude` DECIMAL(11,8) NOT NULL,
   `longitude` DECIMAL(11,8) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `latitude_longitude_UNIQUE` (`longitude` ASC, `latitude` ASC) VISIBLE)
+  UNIQUE INDEX `latitude_longitude_UNIQUE` (`longitude` ASC, `latitude` ASC) VISIBLE,
+  INDEX `address_idx` (`address` ASC) VISIBLE,
+  INDEX `country_idx` (`country` ASC) VISIBLE,
+  INDEX `city_idx` (`city` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -42,7 +45,9 @@ CREATE TABLE IF NOT EXISTS `sixt_development`.`vehicles` (
   `plate` VARCHAR(15) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `vin_UNIQUE` (`vin` ASC) VISIBLE,
-  UNIQUE INDEX `plate_UNIQUE` (`plate` ASC) VISIBLE)
+  UNIQUE INDEX `plate_UNIQUE` (`plate` ASC) VISIBLE,
+  INDEX `make_idx` (`make` ASC) VISIBLE,
+  INDEX `model_idx` (`model` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
@@ -62,7 +67,10 @@ CREATE TABLE IF NOT EXISTS `sixt_development`.`users` (
   `gender` ENUM('male', 'female') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
-  UNIQUE INDEX `driver_license_UNIQUE` (`driver_license` ASC) VISIBLE);
+  UNIQUE INDEX `driver_license_UNIQUE` (`driver_license` ASC) VISIBLE,
+  INDEX `first_name_idx` (`first_name` ASC) VISIBLE,
+  INDEX `last_name_idx` (`last_name` ASC) VISIBLE,
+  INDEX `dob_idx` (`dob` ASC) VISIBLE);
 
 
 -- -----------------------------------------------------
