@@ -37,7 +37,7 @@ class BaseController(ABC):
         :param obj_list: object list to create in Database
         :return: list of created object
         """
-        return self._service.create(obj_list)
+        return self._service.create_all(obj_list)
 
     def update(self, key: int, obj: object) -> None:
         """

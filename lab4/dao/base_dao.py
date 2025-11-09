@@ -1,7 +1,5 @@
 from abc import ABC
 from typing import List
-from sqlalchemy import inspect
-from sqlalchemy.orm import Mapper
 
 
 class BaseDAO(ABC):
@@ -24,7 +22,7 @@ class BaseDAO(ABC):
         :param key: integer (PK)
         :return: object
         """
-        return self._session.query(self._model).get(key)
+        return self._session.get(self._model, key)
 
     def create(self, obj: object) -> object:
         """
@@ -46,20 +44,18 @@ class BaseDAO(ABC):
         self._session.commit()
         return obj_list
 
-    def update(self, key: int, attrs: object) -> None:
+    def update(self, key: int, attrs: dict) -> None:
         """
         Updates object in database table.
         :param key: integer (PK)
-        :param attrs: attrs of obj to update in database
+        :param attrs: dict of attributes to update
         """
-        obj = self._session.query(self._model).get(key)
-        mapper: Mapper = inspect(type(attrs))
-        columns = mapper.columns._collection
-        for column_name, column_obj in columns:
-            if not column_obj.primary_key:
-                value = getattr(attrs, column_name)
-                setattr(obj, column_name, value)
-        self._session.commit()
+        obj = self._session.get(self._model, key)
+        if obj:
+            for attr_name, attr_value in attrs.items():
+                if hasattr(obj, attr_name):
+                    setattr(obj, attr_name, attr_value)
+            self._session.commit()
 
     def patch(self, key: int, field: str, value: object) -> None:
         """
@@ -68,22 +64,24 @@ class BaseDAO(ABC):
         :param field: field name of object
         :param value: field value of object
         """
-        obj = self._session.query(self._model).get(key)
-        setattr(obj, field, value)
-        self._session.commit()
+        obj = self._session.get(self._model, key)
+        if obj:
+            setattr(obj, field, value)
+            self._session.commit()
 
     def delete(self, key: int) -> None:
         """
         Deletes object from database table by integer key.
         :param key: integer (PK)
         """
-        obj = self._session.query(self._model).get(key)
-        self._session.delete(obj)
-        try:
-            self._session.commit()
-        except Exception:
-            self._session.rollback()
-            raise
+        obj = self._session.get(self._model, key)
+        if obj:
+            self._session.delete(obj)
+            try:
+                self._session.commit()
+            except Exception:
+                self._session.rollback()
+                raise
 
     def delete_all(self) -> None:
         """

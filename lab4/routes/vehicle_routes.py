@@ -1,0 +1,121 @@
+from flask import Blueprint, request, jsonify
+from config.db import SessionLocal
+from controllers.vehicle_controller import VehicleController
+from domain.vehicle import Vehicle
+
+vehicle_bp = Blueprint('vehicles', __name__, url_prefix='/api/vehicles')
+
+
+@vehicle_bp.route('/', methods=['GET'])
+def get_all_vehicles():
+    """
+    GET /api/vehicles - Get all vehicles
+    """
+    controller = VehicleController(SessionLocal())
+    vehicles = controller.find_all()
+    return jsonify([vehicle.to_dict() for vehicle in vehicles]), 200
+
+
+@vehicle_bp.route('/<int:vehicle_id>', methods=['GET'])
+def get_vehicle(vehicle_id):
+    """
+    GET /api/vehicles/<id> - Get a vehicle by ID
+    """
+    controller = VehicleController(SessionLocal())
+    vehicle = controller.find_by_id(vehicle_id)
+    if vehicle:
+        return jsonify(vehicle.to_dict()), 200
+    return jsonify({'error': 'Vehicle not found'}), 404
+
+
+@vehicle_bp.route('/', methods=['POST'])
+def create_vehicle():
+    """
+    POST /api/vehicles - Create a new vehicle
+    Expected JSON body:
+    {
+        "make": "string",
+        "model": "string",
+        "year": integer,
+        "vin": "string",
+        "body": "sedan|hatchback|wagon|...",
+        "plate": "string"
+    }
+    """
+    data = request.get_json()
+
+    required_fields = ['make', 'model', 'year', 'vin', 'body', 'plate']
+    if not data or not all(field in data for field in required_fields):
+        return jsonify({'error': f'Missing required fields: {", ".join(required_fields)}'}), 400
+
+    controller = VehicleController(SessionLocal())
+
+    # Check if VIN or plate already exists
+    if controller.find_by_vin(data['vin']):
+        return jsonify({'error': 'VIN already exists'}), 400
+
+    if controller.find_by_plate(data['plate']):
+        return jsonify({'error': 'License plate already exists'}), 400
+
+    # Create new vehicle
+    new_vehicle = Vehicle(
+        make=data['make'],
+        model=data['model'],
+        year=data['year'],
+        vin=data['vin'],
+        body=data['body'],
+        plate=data['plate']
+    )
+
+    created_vehicle = controller.create(new_vehicle)
+    return jsonify(created_vehicle.to_dict()), 201
+
+
+@vehicle_bp.route('/<int:vehicle_id>', methods=['PUT'])
+def update_vehicle(vehicle_id):
+    """
+    PUT /api/vehicles/<id> - Update a vehicle
+    """
+    data = request.get_json()
+
+    if not data:
+        return jsonify({'error': 'No data provided'}), 400
+
+    controller = VehicleController(SessionLocal())
+    vehicle = controller.find_by_id(vehicle_id)
+
+    if not vehicle:
+        return jsonify({'error': 'Vehicle not found'}), 404
+
+    # Check for duplicate VIN/plate if they're being changed
+    if 'vin' in data and data['vin'] != vehicle.vin:
+        existing_vehicle = controller.find_by_vin(data['vin'])
+        if existing_vehicle:
+            return jsonify({'error': 'VIN already exists'}), 400
+
+    if 'plate' in data and data['plate'] != vehicle.plate:
+        existing_vehicle = controller.find_by_plate(data['plate'])
+        if existing_vehicle:
+            return jsonify({'error': 'License plate already exists'}), 400
+
+    # Update vehicle
+    controller.update(vehicle_id, data)
+
+    # Fetch updated vehicle
+    updated_vehicle = controller.find_by_id(vehicle_id)
+    return jsonify(updated_vehicle.to_dict()), 200
+
+
+@vehicle_bp.route('/<int:vehicle_id>', methods=['DELETE'])
+def delete_vehicle(vehicle_id):
+    """
+    DELETE /api/vehicles/<id> - Delete a vehicle
+    """
+    controller = VehicleController(SessionLocal())
+    vehicle = controller.find_by_id(vehicle_id)
+
+    if not vehicle:
+        return jsonify({'error': 'Vehicle not found'}), 404
+
+    controller.delete(vehicle_id)
+    return jsonify({'message': 'Vehicle deleted successfully'}), 200
