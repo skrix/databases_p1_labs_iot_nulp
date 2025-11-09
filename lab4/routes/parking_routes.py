@@ -99,3 +99,15 @@ def delete_parking(parking_id):
 
     controller.delete(parking_id)
     return jsonify({'message': 'Parking deleted successfully'}), 200
+
+
+@parking_bp.route('/<int:parking_id>/vehicles', methods=['GET'])
+def get_parking_vehicles(parking_id):
+    controller = ParkingController(SessionLocal())
+    parking = controller.find_by_id(parking_id)
+
+    if not parking:
+        return jsonify({'error': 'Parking not found'}), 404
+
+    vehicles = controller.find_vehicles(parking_id)
+    return jsonify([vehicle.to_dict() for vehicle in vehicles]), 200

@@ -25,3 +25,9 @@ class VehicleController(BaseController):
         :return: Vehicle object or None
         """
         return self._service.find_by_plate(plate)
+
+    def find_rentings(self, vehicle_id: int):
+        return self._service.find_rentings(vehicle_id)
+
+    def find_parkings(self, vehicle_id: int):
+        return self._service.find_parkings(vehicle_id)

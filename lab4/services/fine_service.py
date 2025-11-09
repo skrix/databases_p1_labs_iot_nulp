@@ -24,3 +24,6 @@ class FineService(BaseService):
         :return: List of Fine objects
         """
         return self._dao.find_unpaid_fines()
+
+    def find_payments(self, fine_id: int):
+        return self._dao.find_payments(fine_id)

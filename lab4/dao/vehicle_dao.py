@@ -26,3 +26,14 @@ class VehicleDAO(BaseDAO):
         :return: Vehicle object or None
         """
         return self._session.query(self._model).filter_by(plate=plate).first()
+
+    def find_rentings(self, vehicle_id: int):
+        from domain.renting import Renting
+        return self._session.query(Renting).filter_by(vehicle_id=vehicle_id).all()
+
+    def find_parkings(self, vehicle_id: int):
+        from domain.parking import Parking
+        from domain.parking_vehicle import ParkingVehicle
+        return self._session.query(Parking).join(
+            ParkingVehicle, Parking.id == ParkingVehicle.parking_id
+        ).filter(ParkingVehicle.vehicle_id == vehicle_id).all()

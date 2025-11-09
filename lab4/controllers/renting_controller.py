@@ -24,3 +24,9 @@ class RentingController(BaseController):
         :return: List of Renting objects
         """
         return self._service.find_active_rentings()
+
+    def find_fines(self, renting_id: int):
+        return self._service.find_fines(renting_id)
+
+    def find_payments(self, renting_id: int):
+        return self._service.find_payments(renting_id)

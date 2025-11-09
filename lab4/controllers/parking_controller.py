@@ -17,3 +17,6 @@ class ParkingController(BaseController):
         :return: List of Parking objects
         """
         return self._service.find_by_city(city)
+
+    def find_vehicles(self, parking_id: int):
+        return self._service.find_vehicles(parking_id)

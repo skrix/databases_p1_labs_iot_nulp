@@ -107,3 +107,27 @@ def delete_renting(renting_id):
 
     controller.delete(renting_id)
     return jsonify({'message': 'Renting deleted successfully'}), 200
+
+
+@renting_bp.route('/<int:renting_id>/fines', methods=['GET'])
+def get_renting_fines(renting_id):
+    controller = RentingController(SessionLocal())
+    renting = controller.find_by_id(renting_id)
+
+    if not renting:
+        return jsonify({'error': 'Renting not found'}), 404
+
+    fines = controller.find_fines(renting_id)
+    return jsonify([fine.to_dict() for fine in fines]), 200
+
+
+@renting_bp.route('/<int:renting_id>/payments', methods=['GET'])
+def get_renting_payments(renting_id):
+    controller = RentingController(SessionLocal())
+    renting = controller.find_by_id(renting_id)
+
+    if not renting:
+        return jsonify({'error': 'Renting not found'}), 404
+
+    payments = controller.find_payments(renting_id)
+    return jsonify([payment.to_dict() for payment in payments]), 200

@@ -18,3 +18,10 @@ class ParkingDAO(BaseDAO):
         :return: List of Parking objects
         """
         return self._session.query(self._model).filter_by(city=city).all()
+
+    def find_vehicles(self, parking_id: int):
+        from domain.vehicle import Vehicle
+        from domain.parking_vehicle import ParkingVehicle
+        return self._session.query(Vehicle).join(
+            ParkingVehicle, Vehicle.id == ParkingVehicle.vehicle_id
+        ).filter(ParkingVehicle.parking_id == parking_id).all()

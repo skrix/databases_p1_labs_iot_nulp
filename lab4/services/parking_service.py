@@ -17,3 +17,6 @@ class ParkingService(BaseService):
         :return: List of Parking objects
         """
         return self._dao.find_by_city(city)
+
+    def find_vehicles(self, parking_id: int):
+        return self._dao.find_vehicles(parking_id)

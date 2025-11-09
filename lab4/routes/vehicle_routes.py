@@ -119,3 +119,27 @@ def delete_vehicle(vehicle_id):
 
     controller.delete(vehicle_id)
     return jsonify({'message': 'Vehicle deleted successfully'}), 200
+
+
+@vehicle_bp.route('/<int:vehicle_id>/rentings', methods=['GET'])
+def get_vehicle_rentings(vehicle_id):
+    controller = VehicleController(SessionLocal())
+    vehicle = controller.find_by_id(vehicle_id)
+
+    if not vehicle:
+        return jsonify({'error': 'Vehicle not found'}), 404
+
+    rentings = controller.find_rentings(vehicle_id)
+    return jsonify([renting.to_dict() for renting in rentings]), 200
+
+
+@vehicle_bp.route('/<int:vehicle_id>/parkings', methods=['GET'])
+def get_vehicle_parkings(vehicle_id):
+    controller = VehicleController(SessionLocal())
+    vehicle = controller.find_by_id(vehicle_id)
+
+    if not vehicle:
+        return jsonify({'error': 'Vehicle not found'}), 404
+
+    parkings = controller.find_parkings(vehicle_id)
+    return jsonify([parking.to_dict() for parking in parkings]), 200

@@ -25,3 +25,9 @@ class UserService(BaseService):
         :return: User object or None
         """
         return self._dao.find_by_driver_license(driver_license)
+
+    def find_rentings(self, user_id: int):
+        return self._dao.find_rentings(user_id)
+
+    def find_fines(self, user_id: int):
+        return self._dao.find_fines(user_id)

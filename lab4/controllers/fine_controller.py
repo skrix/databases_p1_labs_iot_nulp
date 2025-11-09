@@ -24,3 +24,6 @@ class FineController(BaseController):
         :return: List of Fine objects
         """
         return self._service.find_unpaid_fines()
+
+    def find_payments(self, fine_id: int):
+        return self._service.find_payments(fine_id)

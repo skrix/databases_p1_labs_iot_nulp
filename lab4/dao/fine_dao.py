@@ -25,3 +25,10 @@ class FineDAO(BaseDAO):
         :return: List of Fine objects
         """
         return self._session.query(self._model).filter_by(status='unpaid').all()
+
+    def find_payments(self, fine_id: int):
+        from domain.payment import Payment
+        from domain.fine_payment import FinePayment
+        return self._session.query(Payment).join(
+            FinePayment, Payment.id == FinePayment.payment_id
+        ).filter(FinePayment.fine_id == fine_id).all()

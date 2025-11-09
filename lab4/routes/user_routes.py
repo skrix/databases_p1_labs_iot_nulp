@@ -129,3 +129,27 @@ def delete_user(user_id):
 
     controller.delete(user_id)
     return jsonify({'message': 'User deleted successfully'}), 200
+
+
+@user_bp.route('/<int:user_id>/rentings', methods=['GET'])
+def get_user_rentings(user_id):
+    controller = UserController(SessionLocal())
+    user = controller.find_by_id(user_id)
+
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    rentings = controller.find_rentings(user_id)
+    return jsonify([renting.to_dict() for renting in rentings]), 200
+
+
+@user_bp.route('/<int:user_id>/fines', methods=['GET'])
+def get_user_fines(user_id):
+    controller = UserController(SessionLocal())
+    user = controller.find_by_id(user_id)
+
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    fines = controller.find_fines(user_id)
+    return jsonify([fine.to_dict() for fine in fines]), 200

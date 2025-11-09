@@ -24,3 +24,9 @@ class RentingService(BaseService):
         :return: List of Renting objects
         """
         return self._dao.find_active_rentings()
+
+    def find_fines(self, renting_id: int):
+        return self._dao.find_fines(renting_id)
+
+    def find_payments(self, renting_id: int):
+        return self._dao.find_payments(renting_id)

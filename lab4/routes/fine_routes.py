@@ -107,3 +107,15 @@ def delete_fine(fine_id):
 
     controller.delete(fine_id)
     return jsonify({'message': 'Fine deleted successfully'}), 200
+
+
+@fine_bp.route('/<int:fine_id>/payments', methods=['GET'])
+def get_fine_payments(fine_id):
+    controller = FineController(SessionLocal())
+    fine = controller.find_by_id(fine_id)
+
+    if not fine:
+        return jsonify({'error': 'Fine not found'}), 404
+
+    payments = controller.find_payments(fine_id)
+    return jsonify([payment.to_dict() for payment in payments]), 200

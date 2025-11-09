@@ -25,3 +25,17 @@ class RentingDAO(BaseDAO):
         :return: List of Renting objects
         """
         return self._session.query(self._model).filter(self._model.end_at.is_(None)).all()
+
+    def find_fines(self, renting_id: int):
+        from domain.fine import Fine
+        from domain.renting_fine import RentingFine
+        return self._session.query(Fine).join(
+            RentingFine, Fine.id == RentingFine.fine_id
+        ).filter(RentingFine.renting_id == renting_id).all()
+
+    def find_payments(self, renting_id: int):
+        from domain.payment import Payment
+        from domain.renting_payment import RentingPayment
+        return self._session.query(Payment).join(
+            RentingPayment, Payment.id == RentingPayment.payment_id
+        ).filter(RentingPayment.renting_id == renting_id).all()
