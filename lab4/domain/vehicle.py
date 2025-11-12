@@ -21,11 +21,12 @@ class Vehicle(Base):
     def __repr__(self):
         return f"<Vehicle(id={self.id}, make='{self.make}', model='{self.model}', plate='{self.plate}')>"
 
-    def to_dict(self):
+    def to_dict(self, include_nested=False):
         """
         Converts the Vehicle object to a dictionary.
+        :param include_nested: If True, includes nested rentings and parkings
         """
-        return {
+        result = {
             'id': self.id,
             'make': self.make,
             'model': self.model,
@@ -34,3 +35,13 @@ class Vehicle(Base):
             'body': self.body,
             'plate': self.plate
         }
+
+        if include_nested:
+            # Include nested rentings if available
+            if hasattr(self, '_rentings') and self._rentings is not None:
+                result['rentings'] = [r.to_dict() for r in self._rentings]
+            # Include nested parkings if available
+            if hasattr(self, '_parkings') and self._parkings is not None:
+                result['parkings'] = [p.to_dict() for p in self._parkings]
+
+        return result

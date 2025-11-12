@@ -10,21 +10,37 @@ vehicle_bp = Blueprint('vehicles', __name__, url_prefix='/api/vehicles')
 def get_all_vehicles():
     """
     GET /api/vehicles - Get all vehicles
+    Query parameters:
+    - nested: if 'true', includes nested rentings and parkings
     """
     controller = VehicleController(SessionLocal())
-    vehicles = controller.find_all()
-    return jsonify([vehicle.to_dict() for vehicle in vehicles]), 200
+    include_nested = request.args.get('nested', 'false').lower() == 'true'
+
+    if include_nested:
+        vehicles = controller.find_all_with_nested()
+        return jsonify([vehicle.to_dict(include_nested=True) for vehicle in vehicles]), 200
+    else:
+        vehicles = controller.find_all()
+        return jsonify([vehicle.to_dict() for vehicle in vehicles]), 200
 
 
 @vehicle_bp.route('/<int:vehicle_id>', methods=['GET'])
 def get_vehicle(vehicle_id):
     """
     GET /api/vehicles/<id> - Get a vehicle by ID
+    Query parameters:
+    - nested: if 'true', includes nested rentings and parkings
     """
     controller = VehicleController(SessionLocal())
-    vehicle = controller.find_by_id(vehicle_id)
+    include_nested = request.args.get('nested', 'false').lower() == 'true'
+
+    if include_nested:
+        vehicle = controller.find_by_id_with_nested(vehicle_id)
+    else:
+        vehicle = controller.find_by_id(vehicle_id)
+
     if vehicle:
-        return jsonify(vehicle.to_dict()), 200
+        return jsonify(vehicle.to_dict(include_nested=include_nested)), 200
     return jsonify({'error': 'Vehicle not found'}), 404
 
 

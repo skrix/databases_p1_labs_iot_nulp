@@ -10,6 +10,21 @@ class UserController(BaseController):
     def __init__(self, session):
         self._service = UserService(session)
 
+    def find_by_id_with_nested(self, user_id: int):
+        """
+        Finds a user by ID with nested relationships.
+        :param user_id: user ID
+        :return: User object with nested data or None
+        """
+        return self._service.find_by_id_with_nested(user_id)
+
+    def find_all_with_nested(self):
+        """
+        Finds all users with nested relationships.
+        :return: List of User objects with nested data
+        """
+        return self._service.find_all_with_nested()
+
     def find_by_email(self, email: str):
         """
         Finds a user by email.

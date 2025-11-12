@@ -21,11 +21,12 @@ class Renting(Base):
     def __repr__(self):
         return f"<Renting(id={self.id}, user_id={self.user_id}, vehicle_id={self.vehicle_id})>"
 
-    def to_dict(self):
+    def to_dict(self, include_nested=False):
         """
         Converts the Renting object to a dictionary.
+        :param include_nested: If True, includes nested user, vehicle, fines, and payments
         """
-        return {
+        result = {
             'id': self.id,
             'user_id': self.user_id,
             'vehicle_id': self.vehicle_id,
@@ -34,3 +35,19 @@ class Renting(Base):
             'start_at': self.start_at.isoformat() if self.start_at else None,
             'end_at': self.end_at.isoformat() if self.end_at else None
         }
+
+        if include_nested:
+            # Include nested user if available
+            if hasattr(self, '_user') and self._user is not None:
+                result['user'] = self._user.to_dict()
+            # Include nested vehicle if available
+            if hasattr(self, '_vehicle') and self._vehicle is not None:
+                result['vehicle'] = self._vehicle.to_dict()
+            # Include nested fines if available
+            if hasattr(self, '_fines') and self._fines is not None:
+                result['fines'] = [f.to_dict() for f in self._fines]
+            # Include nested payments if available
+            if hasattr(self, '_payments') and self._payments is not None:
+                result['payments'] = [p.to_dict() for p in self._payments]
+
+        return result

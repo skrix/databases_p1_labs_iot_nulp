@@ -10,31 +10,55 @@ renting_bp = Blueprint('rentings', __name__, url_prefix='/api/rentings')
 def get_all_rentings():
     """
     GET /api/rentings - Get all rentings
+    Query parameters:
+    - nested: if 'true', includes nested user, vehicle, fines, and payments
     """
     controller = RentingController(SessionLocal())
-    rentings = controller.find_all()
-    return jsonify([renting.to_dict() for renting in rentings]), 200
+    include_nested = request.args.get('nested', 'false').lower() == 'true'
+
+    if include_nested:
+        rentings = controller.find_all_with_nested()
+        return jsonify([renting.to_dict(include_nested=True) for renting in rentings]), 200
+    else:
+        rentings = controller.find_all()
+        return jsonify([renting.to_dict() for renting in rentings]), 200
 
 
 @renting_bp.route('/active', methods=['GET'])
 def get_active_rentings():
     """
     GET /api/rentings/active - Get all active rentings
+    Query parameters:
+    - nested: if 'true', includes nested user, vehicle, fines, and payments
     """
     controller = RentingController(SessionLocal())
-    rentings = controller.find_active_rentings()
-    return jsonify([renting.to_dict() for renting in rentings]), 200
+    include_nested = request.args.get('nested', 'false').lower() == 'true'
+
+    if include_nested:
+        rentings = controller.find_active_rentings_with_nested()
+        return jsonify([renting.to_dict(include_nested=True) for renting in rentings]), 200
+    else:
+        rentings = controller.find_active_rentings()
+        return jsonify([renting.to_dict() for renting in rentings]), 200
 
 
 @renting_bp.route('/<int:renting_id>', methods=['GET'])
 def get_renting(renting_id):
     """
     GET /api/rentings/<id> - Get a renting by ID
+    Query parameters:
+    - nested: if 'true', includes nested user, vehicle, fines, and payments
     """
     controller = RentingController(SessionLocal())
-    renting = controller.find_by_id(renting_id)
+    include_nested = request.args.get('nested', 'false').lower() == 'true'
+
+    if include_nested:
+        renting = controller.find_by_id_with_nested(renting_id)
+    else:
+        renting = controller.find_by_id(renting_id)
+
     if renting:
-        return jsonify(renting.to_dict()), 200
+        return jsonify(renting.to_dict(include_nested=include_nested)), 200
     return jsonify({'error': 'Renting not found'}), 404
 
 

@@ -23,11 +23,12 @@ class User(Base):
     def __repr__(self):
         return f"<User(id={self.id}, first_name='{self.first_name}', last_name='{self.last_name}', email='{self.email}')>"
 
-    def to_dict(self):
+    def to_dict(self, include_nested=False):
         """
         Converts the User object to a dictionary.
+        :param include_nested: If True, includes nested rentings and fines
         """
-        return {
+        result = {
             'id': self.id,
             'first_name': self.first_name,
             'middle_name': self.middle_name,
@@ -38,3 +39,13 @@ class User(Base):
             'driver_license': self.driver_license,
             'gender': self.gender
         }
+
+        if include_nested:
+            # Include nested rentings if available
+            if hasattr(self, '_rentings') and self._rentings is not None:
+                result['rentings'] = [r.to_dict(include_nested=True) for r in self._rentings]
+            # Include nested fines if available
+            if hasattr(self, '_fines') and self._fines is not None:
+                result['fines'] = [f.to_dict() for f in self._fines]
+
+        return result

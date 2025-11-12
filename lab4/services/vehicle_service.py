@@ -10,6 +10,21 @@ class VehicleService(BaseService):
     def __init__(self, session):
         self._dao = VehicleDAO(session)
 
+    def find_by_id_with_nested(self, vehicle_id: int):
+        """
+        Finds a vehicle by ID with nested relationships.
+        :param vehicle_id: vehicle ID
+        :return: Vehicle object with nested data or None
+        """
+        return self._dao.find_by_id_with_nested(vehicle_id)
+
+    def find_all_with_nested(self):
+        """
+        Finds all vehicles with nested relationships.
+        :return: List of Vehicle objects with nested data
+        """
+        return self._dao.find_all_with_nested()
+
     def find_by_vin(self, vin: str):
         """
         Finds a vehicle by VIN.

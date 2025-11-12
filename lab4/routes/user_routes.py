@@ -10,21 +10,37 @@ user_bp = Blueprint('users', __name__, url_prefix='/api/users')
 def get_all_users():
     """
     GET /api/users - Get all users
+    Query parameters:
+    - nested: if 'true', includes nested rentings and fines
     """
     controller = UserController(SessionLocal())
-    users = controller.find_all()
-    return jsonify([user.to_dict() for user in users]), 200
+    include_nested = request.args.get('nested', 'false').lower() == 'true'
+
+    if include_nested:
+        users = controller.find_all_with_nested()
+        return jsonify([user.to_dict(include_nested=True) for user in users]), 200
+    else:
+        users = controller.find_all()
+        return jsonify([user.to_dict() for user in users]), 200
 
 
 @user_bp.route('/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     """
     GET /api/users/<id> - Get a user by ID
+    Query parameters:
+    - nested: if 'true', includes nested rentings and fines
     """
     controller = UserController(SessionLocal())
-    user = controller.find_by_id(user_id)
+    include_nested = request.args.get('nested', 'false').lower() == 'true'
+
+    if include_nested:
+        user = controller.find_by_id_with_nested(user_id)
+    else:
+        user = controller.find_by_id(user_id)
+
     if user:
-        return jsonify(user.to_dict()), 200
+        return jsonify(user.to_dict(include_nested=include_nested)), 200
     return jsonify({'error': 'User not found'}), 404
 
 

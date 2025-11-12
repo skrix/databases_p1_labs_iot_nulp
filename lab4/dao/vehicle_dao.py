@@ -11,6 +11,29 @@ class VehicleDAO(BaseDAO):
     def __init__(self, session):
         self._session = session
 
+    def find_by_id_with_nested(self, vehicle_id: int):
+        """
+        Finds a vehicle by ID with nested rentings and parkings.
+        :param vehicle_id: vehicle ID
+        :return: Vehicle object with nested data or None
+        """
+        vehicle = self._session.query(self._model).filter_by(id=vehicle_id).first()
+        if vehicle:
+            vehicle._rentings = self.find_rentings(vehicle_id)
+            vehicle._parkings = self.find_parkings(vehicle_id)
+        return vehicle
+
+    def find_all_with_nested(self):
+        """
+        Finds all vehicles with nested rentings and parkings.
+        :return: List of Vehicle objects with nested data
+        """
+        vehicles = self._session.query(self._model).all()
+        for vehicle in vehicles:
+            vehicle._rentings = self.find_rentings(vehicle.id)
+            vehicle._parkings = self.find_parkings(vehicle.id)
+        return vehicles
+
     def find_by_vin(self, vin: str) -> Vehicle:
         """
         Finds a vehicle by VIN.
