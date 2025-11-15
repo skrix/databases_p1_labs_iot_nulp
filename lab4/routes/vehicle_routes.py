@@ -73,7 +73,6 @@ def create_vehicle():
     if controller.find_by_plate(data['plate']):
         return jsonify({'error': 'License plate already exists'}), 400
 
-    # Create new vehicle
     new_vehicle = Vehicle(
         make=data['make'],
         model=data['model'],
@@ -114,10 +113,7 @@ def update_vehicle(vehicle_id):
         if existing_vehicle:
             return jsonify({'error': 'License plate already exists'}), 400
 
-    # Update vehicle
     controller.update(vehicle_id, data)
-
-    # Fetch updated vehicle
     updated_vehicle = controller.find_by_id(vehicle_id)
     return jsonify(updated_vehicle.to_dict()), 200
 

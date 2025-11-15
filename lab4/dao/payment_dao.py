@@ -10,11 +10,3 @@ class PaymentDAO(BaseDAO):
 
     def __init__(self, session):
         self._session = session
-
-    def find_by_status(self, status: str):
-        """
-        Finds all payments with a specific status.
-        :param status: payment status
-        :return: List of Payment objects
-        """
-        return self._session.query(self._model).filter_by(status=status).all()

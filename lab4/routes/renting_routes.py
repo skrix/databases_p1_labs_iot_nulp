@@ -24,24 +24,6 @@ def get_all_rentings():
         return jsonify([renting.to_dict() for renting in rentings]), 200
 
 
-@renting_bp.route('/active', methods=['GET'])
-def get_active_rentings():
-    """
-    GET /api/rentings/active - Get all active rentings
-    Query parameters:
-    - nested: if 'true', includes nested user, vehicle, fines, and payments
-    """
-    controller = RentingController(SessionLocal())
-    include_nested = request.args.get('nested', 'false').lower() == 'true'
-
-    if include_nested:
-        rentings = controller.find_active_rentings_with_nested()
-        return jsonify([renting.to_dict(include_nested=True) for renting in rentings]), 200
-    else:
-        rentings = controller.find_active_rentings()
-        return jsonify([renting.to_dict() for renting in rentings]), 200
-
-
 @renting_bp.route('/<int:renting_id>', methods=['GET'])
 def get_renting(renting_id):
     """
@@ -81,8 +63,6 @@ def create_renting():
         return jsonify({'error': f'Missing required fields: {", ".join(required_fields)}'}), 400
 
     controller = RentingController(SessionLocal())
-
-    # Create new renting
     new_renting = Renting(
         user_id=data['user_id'],
         vehicle_id=data['vehicle_id'],
@@ -110,10 +90,7 @@ def update_renting(renting_id):
     if not renting:
         return jsonify({'error': 'Renting not found'}), 404
 
-    # Update renting
     controller.update(renting_id, data)
-
-    # Fetch updated renting
     updated_renting = controller.find_by_id(renting_id)
     return jsonify(updated_renting.to_dict()), 200
 

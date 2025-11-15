@@ -34,16 +34,6 @@ class BaseDAO(ABC):
         self._session.commit()
         return obj
 
-    def create_all(self, obj_list: List[object]) -> List[object]:
-        """
-        Creates objects from object list.
-        :param obj_list: object list to create in database
-        :return: list of created object
-        """
-        self._session.add_all(obj_list)
-        self._session.commit()
-        return obj_list
-
     def update(self, key: int, attrs: dict) -> None:
         """
         Updates object in database table.
@@ -55,18 +45,6 @@ class BaseDAO(ABC):
             for attr_name, attr_value in attrs.items():
                 if hasattr(obj, attr_name):
                     setattr(obj, attr_name, attr_value)
-            self._session.commit()
-
-    def patch(self, key: int, field: str, value: object) -> None:
-        """
-        Modifies defined field of object in database table.
-        :param key: integer (PK)
-        :param field: field name of object
-        :param value: field value of object
-        """
-        obj = self._session.get(self._model, key)
-        if obj:
-            setattr(obj, field, value)
             self._session.commit()
 
     def delete(self, key: int) -> None:
@@ -82,10 +60,3 @@ class BaseDAO(ABC):
             except Exception:
                 self._session.rollback()
                 raise
-
-    def delete_all(self) -> None:
-        """
-        Deletes all objects from database table.
-        """
-        self._session.query(self._model).delete()
-        self._session.commit()

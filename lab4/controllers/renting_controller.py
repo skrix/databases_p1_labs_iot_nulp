@@ -25,28 +25,6 @@ class RentingController(BaseController):
         """
         return self._service.find_all_with_nested()
 
-    def find_by_user_id(self, user_id: int):
-        """
-        Finds all rentings for a user.
-        :param user_id: user ID
-        :return: List of Renting objects
-        """
-        return self._service.find_by_user_id(user_id)
-
-    def find_active_rentings(self):
-        """
-        Finds all active rentings.
-        :return: List of Renting objects
-        """
-        return self._service.find_active_rentings()
-
-    def find_active_rentings_with_nested(self):
-        """
-        Finds all active rentings with nested relationships.
-        :return: List of Renting objects with nested data
-        """
-        return self._service.find_active_rentings_with_nested()
-
     def find_fines(self, renting_id: int):
         return self._service.find_fines(renting_id)
 

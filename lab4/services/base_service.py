@@ -31,14 +31,6 @@ class BaseService(ABC):
         """
         return self._dao.create(obj)
 
-    def create_all(self, obj_list: List[object]) -> List[object]:
-        """
-        Creates objects from object list using Data Access layer.
-        :param obj_list: object list to create in Database
-        :return: list of created object
-        """
-        return self._dao.create_all(obj_list)
-
     def update(self, key: int, obj: object):
         """
         Updates object in database table using Data Access layer.
@@ -48,24 +40,9 @@ class BaseService(ABC):
         """
         self._dao.update(key, obj)
 
-    def patch(self, key: int, field: str, value: object):
-        """
-        Modifies defined field of object in database table using Data Access layer.
-        :param key: integer (PK)
-        :param field: field name of object
-        :param value: field value of object
-        """
-        self._dao.patch(key, field, value)
-
     def delete(self, key: int) -> None:
         """
         Deletes object from database table by integer key from Data Access layer.
         :param key: integer (PK)
         """
         self._dao.delete(key)
-
-    def delete_all(self) -> None:
-        """
-        Deletes all objects from database table using Data Access layer.
-        """
-        self._dao.delete_all()

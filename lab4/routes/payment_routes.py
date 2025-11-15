@@ -46,8 +46,6 @@ def create_payment():
         return jsonify({'error': f'Missing required fields: {", ".join(required_fields)}'}), 400
 
     controller = PaymentController(SessionLocal())
-
-    # Create new payment
     new_payment = Payment(
         status=data['status'],
         amount=data['amount'],
@@ -74,10 +72,7 @@ def update_payment(payment_id):
     if not payment:
         return jsonify({'error': 'Payment not found'}), 404
 
-    # Update payment
     controller.update(payment_id, data)
-
-    # Fetch updated payment
     updated_payment = controller.find_by_id(payment_id)
     return jsonify(updated_payment.to_dict()), 200
 

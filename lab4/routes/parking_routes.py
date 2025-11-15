@@ -48,8 +48,6 @@ def create_parking():
         return jsonify({'error': f'Missing required fields: {", ".join(required_fields)}'}), 400
 
     controller = ParkingController(SessionLocal())
-
-    # Create new parking
     new_parking = Parking(
         address=data.get('address'),
         country=data.get('country'),
@@ -78,10 +76,7 @@ def update_parking(parking_id):
     if not parking:
         return jsonify({'error': 'Parking not found'}), 404
 
-    # Update parking
     controller.update(parking_id, data)
-
-    # Fetch updated parking
     updated_parking = controller.find_by_id(parking_id)
     return jsonify(updated_parking.to_dict()), 200
 

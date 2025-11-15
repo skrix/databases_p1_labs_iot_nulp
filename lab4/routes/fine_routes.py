@@ -15,17 +15,6 @@ def get_all_fines():
     fines = controller.find_all()
     return jsonify([fine.to_dict() for fine in fines]), 200
 
-
-@fine_bp.route('/unpaid', methods=['GET'])
-def get_unpaid_fines():
-    """
-    GET /api/fines/unpaid - Get all unpaid fines
-    """
-    controller = FineController(SessionLocal())
-    fines = controller.find_unpaid_fines()
-    return jsonify([fine.to_dict() for fine in fines]), 200
-
-
 @fine_bp.route('/<int:fine_id>', methods=['GET'])
 def get_fine(fine_id):
     """
@@ -58,7 +47,6 @@ def create_fine():
 
     controller = FineController(SessionLocal())
 
-    # Create new fine
     new_fine = Fine(
         status=data['status'],
         amount=data['amount'],
@@ -86,10 +74,7 @@ def update_fine(fine_id):
     if not fine:
         return jsonify({'error': 'Fine not found'}), 404
 
-    # Update fine
     controller.update(fine_id, data)
-
-    # Fetch updated fine
     updated_fine = controller.find_by_id(fine_id)
     return jsonify(updated_fine.to_dict()), 200
 
