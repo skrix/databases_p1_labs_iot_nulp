@@ -14,6 +14,7 @@ DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `sixt_development`.`parkings` (
   `id` INT NOT NULL AUTO_INCREMENT,
+  `owner_id` INT NOT NULL,
   `address` VARCHAR(255) NULL,
   `country` VARCHAR(100) NULL,
   `city` VARCHAR(100) NULL,
@@ -117,6 +118,7 @@ CREATE TABLE `sixt_development`.`fines_payments` (
 
 -- Add indexes to parkings
 ALTER TABLE `sixt_development`.`parkings`
+  ADD INDEX `owner_id_idx` (`owner_id` ASC),
   ADD UNIQUE INDEX `latitude_longitude_UNIQUE` (`latitude` ASC, `longitude` ASC),
   ADD INDEX `address_idx` (`address` ASC),
   ADD INDEX `country_idx` (`country` ASC),
@@ -246,17 +248,42 @@ ALTER TABLE `sixt_development`.`fines_payments`
     ON DELETE CASCADE
     ON UPDATE CASCADE;
 
-INSERT INTO `parkings` (`address`, `country`, `city`, `latitude`, `longitude`) VALUES
-('вул. Хрещатик 22', 'Ukraine', 'Kyiv', 50.45010000, 30.52340000),
-('пр. Свободи 15', 'Ukraine', 'Lviv', 49.83826000, 24.02324000),
-('вул. Дерибасівська 10', 'Ukraine', 'Odesa', 46.48572000, 30.74383000),
-('пр. Соборний 45', 'Ukraine', 'Dnipro', 48.46477000, 35.04617000),
-('вул. Сумська 30', 'Ukraine', 'Kharkiv', 49.98081000, 36.25272000),
-('вул. Соборна 25', 'Ukraine', 'Vinnytsia', 49.23316000, 28.46798000),
-('вул. Центральна 18', 'Ukraine', 'Lutsk', 50.74723000, 25.32538000),
-('пр. Незалежності 50', 'Ukraine', 'Ivano-Frankivsk', 48.92264000, 24.71111000),
-('вул. Театральна 12', 'Ukraine', 'Ternopil', 49.55351000, 25.59476000),
-('вул. Шевченка 8', 'Ukraine', 'Poltava', 49.58826000, 34.55141000);
+-- Add foreign keys to parkings
+ALTER TABLE `sixt_development`.`parkings`
+  ADD CONSTRAINT `parking_owner_id`
+    FOREIGN KEY (`owner_id`)
+    REFERENCES `sixt_development`.`users` (`id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE;
+
+INSERT INTO `users` (`first_name`, `middle_name`, `last_name`, `dob`, `email`, `password`, `driver_license`, `gender`) VALUES
+('Олександр', 'Іванович', 'Шевченко', '1985-03-15', 'o.shevchenko@email.com', SHA2('password123', 256), 'АВЕ123456', 'male'),
+('Олена', 'Петрівна', 'Коваленко', '1990-07-22', 'o.kovalenko@email.com', SHA2('password123', 256), 'АВЕ223456', 'female'),
+('Дмитро', 'Сергійович', 'Мельник', '1982-11-08', 'd.melnyk@email.com', SHA2('password123', 256), 'АВЕ323456', 'male'),
+('Марія', 'Андріївна', 'Бондаренко', '1995-04-30', 'm.bondarenko@email.com', SHA2('password123', 256), 'АВЕ423456', 'female'),
+('Андрій', 'Миколайович', 'Ткаченко', '1988-09-12', 'a.tkachenko@email.com', SHA2('password123', 256), 'АВЕ523456', 'male'),
+('Юлія', 'Олександрівна', 'Кравченко', '1992-01-25', 'y.kravchenko@email.com', SHA2('password123', 256), 'АВЕ623456', 'female'),
+('Віктор', 'Васильович', 'Гончаренко', '1987-06-18', 'v.honcharenko@email.com', SHA2('password123', 256), 'АВЕ723456', 'male'),
+('Тетяна', 'Володимирівна', 'Павленко', '1993-12-05', 't.pavlenko@email.com', SHA2('password123', 256), 'АВЕ823456', 'female'),
+('Максим', 'Ігорович', 'Савченко', '1984-08-28', 'm.savchenko@email.com', SHA2('password123', 256), 'АВЕ923456', 'male'),
+('Наталія', 'Олегівна', 'Романенко', '1991-02-14', 'n.romanenko@email.com', SHA2('password123', 256), 'АВЕ023456', 'female'),
+('Сергій', 'Анатолійович', 'Лисенко', '1989-10-03', 's.lysenko@email.com', SHA2('password123', 256), 'АВЕ033456', 'male'),
+('Анна', 'Михайлівна', 'Поліщук', '1994-05-19', 'a.polischuk@email.com', SHA2('password123', 256), 'АВЕ043456', 'female'),
+('Ігор', 'Романович', 'Коваль', '1986-07-07', 'i.koval@email.com', SHA2('password123', 256), 'АВЕ053456', 'male'),
+('Катерина', 'Ярославівна', 'Захарченко', '1996-11-22', 'k.zakharchenko@email.com', SHA2('password123', 256), 'АВЕ063456', 'female'),
+('Володимир', 'Богданович', 'Білоус', '1983-03-11', 'v.bilous@email.com', SHA2('password123', 256), 'АВЕ073456', 'male');
+
+INSERT INTO `parkings` (`owner_id`, `address`, `country`, `city`, `latitude`, `longitude`) VALUES
+(1, 'вул. Хрещатик 22', 'Ukraine', 'Kyiv', 50.45010000, 30.52340000),
+(1, 'пр. Свободи 15', 'Ukraine', 'Lviv', 49.83826000, 24.02324000),
+(2, 'вул. Дерибасівська 10', 'Ukraine', 'Odesa', 46.48572000, 30.74383000),
+(2, 'пр. Соборний 45', 'Ukraine', 'Dnipro', 48.46477000, 35.04617000),
+(2, 'вул. Сумська 30', 'Ukraine', 'Kharkiv', 49.98081000, 36.25272000),
+(1, 'вул. Соборна 25', 'Ukraine', 'Vinnytsia', 49.23316000, 28.46798000),
+(1, 'вул. Центральна 18', 'Ukraine', 'Lutsk', 50.74723000, 25.32538000),
+(4, 'пр. Незалежності 50', 'Ukraine', 'Ivano-Frankivsk', 48.92264000, 24.71111000),
+(4, 'вул. Театральна 12', 'Ukraine', 'Ternopil', 49.55351000, 25.59476000),
+(4, 'вул. Шевченка 8', 'Ukraine', 'Poltava', 49.58826000, 34.55141000);
 
 INSERT INTO `vehicles` (`make`, `model`, `year`, `vin`, `body`, `plate`) VALUES
 ('Renault', 'Logan', 2023, '1HGBH41JXMN109186', 'sedan', 'AA1234KM'),
@@ -279,23 +306,6 @@ INSERT INTO `vehicles` (`make`, `model`, `year`, `vin`, `body`, `plate`) VALUES
 ('Volkswagen', 'Transporter', 2022, 'IHGBH41JXMN109203', 'van', 'BX0123IF'),
 ('Hyundai', 'Santa Fe', 2023, 'JHGBH41JXMN109204', 'suv', 'CA4567TE'),
 ('Kia', 'Sorento', 2022, 'KHGBH41JXMN109205', 'suv', 'CE8901PT');
-
-INSERT INTO `users` (`first_name`, `middle_name`, `last_name`, `dob`, `email`, `password`, `driver_license`, `gender`) VALUES
-('Олександр', 'Іванович', 'Шевченко', '1985-03-15', 'o.shevchenko@email.com', SHA2('password123', 256), 'АВЕ123456', 'male'),
-('Олена', 'Петрівна', 'Коваленко', '1990-07-22', 'o.kovalenko@email.com', SHA2('password123', 256), 'АВЕ223456', 'female'),
-('Дмитро', 'Сергійович', 'Мельник', '1982-11-08', 'd.melnyk@email.com', SHA2('password123', 256), 'АВЕ323456', 'male'),
-('Марія', 'Андріївна', 'Бондаренко', '1995-04-30', 'm.bondarenko@email.com', SHA2('password123', 256), 'АВЕ423456', 'female'),
-('Андрій', 'Миколайович', 'Ткаченко', '1988-09-12', 'a.tkachenko@email.com', SHA2('password123', 256), 'АВЕ523456', 'male'),
-('Юлія', 'Олександрівна', 'Кравченко', '1992-01-25', 'y.kravchenko@email.com', SHA2('password123', 256), 'АВЕ623456', 'female'),
-('Віктор', 'Васильович', 'Гончаренко', '1987-06-18', 'v.honcharenko@email.com', SHA2('password123', 256), 'АВЕ723456', 'male'),
-('Тетяна', 'Володимирівна', 'Павленко', '1993-12-05', 't.pavlenko@email.com', SHA2('password123', 256), 'АВЕ823456', 'female'),
-('Максим', 'Ігорович', 'Савченко', '1984-08-28', 'm.savchenko@email.com', SHA2('password123', 256), 'АВЕ923456', 'male'),
-('Наталія', 'Олегівна', 'Романенко', '1991-02-14', 'n.romanenko@email.com', SHA2('password123', 256), 'АВЕ023456', 'female'),
-('Сергій', 'Анатолійович', 'Лисенко', '1989-10-03', 's.lysenko@email.com', SHA2('password123', 256), 'АВЕ033456', 'male'),
-('Анна', 'Михайлівна', 'Поліщук', '1994-05-19', 'a.polischuk@email.com', SHA2('password123', 256), 'АВЕ043456', 'female'),
-('Ігор', 'Романович', 'Коваль', '1986-07-07', 'i.koval@email.com', SHA2('password123', 256), 'АВЕ053456', 'male'),
-('Катерина', 'Ярославівна', 'Захарченко', '1996-11-22', 'k.zakharchenko@email.com', SHA2('password123', 256), 'АВЕ063456', 'female'),
-('Володимир', 'Богданович', 'Білоус', '1983-03-11', 'v.bilous@email.com', SHA2('password123', 256), 'АВЕ073456', 'male');
 
 INSERT INTO `parkings_vehicles` (`parking_id`, `vehicle_id`, `created_at`, `updated_at`) VALUES
 (1, 1, '2024-01-01 10:00:00', '2024-01-01 10:00:00'),
