@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, ForeignKey, TIMESTAMP, DateTime
 from sqlalchemy.sql import func
-from config.db import Base
+from config.db import db
 
 
-class Renting(Base):
+class Renting(db.Model):
     """
     Renting model representing a vehicle rental in the database.
     """

@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String, Enum
-from config.db import Base
+from config.db import db
 
 
-class Vehicle(Base):
+class Vehicle(db.Model):
     """
     Vehicle model representing a vehicle in the database.
     """

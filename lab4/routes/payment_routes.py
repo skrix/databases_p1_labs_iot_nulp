@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from config.db import SessionLocal
+from config.db import db
 from controllers.payment_controller import PaymentController
 from domain.payment import Payment
 
@@ -11,7 +11,7 @@ def get_all_payments():
     """
     GET /api/payments - Get all payments
     """
-    controller = PaymentController(SessionLocal())
+    controller = PaymentController(db.session)
     payments = controller.find_all()
     return jsonify([payment.to_dict() for payment in payments]), 200
 
@@ -21,7 +21,7 @@ def get_payment(payment_id):
     """
     GET /api/payments/<id> - Get a payment by ID
     """
-    controller = PaymentController(SessionLocal())
+    controller = PaymentController(db.session)
     payment = controller.find_by_id(payment_id)
     if payment:
         return jsonify(payment.to_dict()), 200
@@ -45,7 +45,7 @@ def create_payment():
     if not data or not all(field in data for field in required_fields):
         return jsonify({'error': f'Missing required fields: {", ".join(required_fields)}'}), 400
 
-    controller = PaymentController(SessionLocal())
+    controller = PaymentController(db.session)
     new_payment = Payment(
         status=data['status'],
         amount=data['amount'],
@@ -66,7 +66,7 @@ def update_payment(payment_id):
     if not data:
         return jsonify({'error': 'No data provided'}), 400
 
-    controller = PaymentController(SessionLocal())
+    controller = PaymentController(db.session)
     payment = controller.find_by_id(payment_id)
 
     if not payment:
@@ -82,7 +82,7 @@ def delete_payment(payment_id):
     """
     DELETE /api/payments/<id> - Delete a payment
     """
-    controller = PaymentController(SessionLocal())
+    controller = PaymentController(db.session)
     payment = controller.find_by_id(payment_id)
 
     if not payment:

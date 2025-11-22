@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from config.db import SessionLocal
+from config.db import db
 from controllers.vehicle_controller import VehicleController
 from domain.vehicle import Vehicle
 
@@ -13,7 +13,7 @@ def get_all_vehicles():
     Query parameters:
     - nested: if 'true', includes nested rentings and parkings
     """
-    controller = VehicleController(SessionLocal())
+    controller = VehicleController(db.session)
     include_nested = request.args.get('nested', 'false').lower() == 'true'
 
     if include_nested:
@@ -31,7 +31,7 @@ def get_vehicle(vehicle_id):
     Query parameters:
     - nested: if 'true', includes nested rentings and parkings
     """
-    controller = VehicleController(SessionLocal())
+    controller = VehicleController(db.session)
     include_nested = request.args.get('nested', 'false').lower() == 'true'
 
     if include_nested:
@@ -64,7 +64,7 @@ def create_vehicle():
     if not data or not all(field in data for field in required_fields):
         return jsonify({'error': f'Missing required fields: {", ".join(required_fields)}'}), 400
 
-    controller = VehicleController(SessionLocal())
+    controller = VehicleController(db.session)
 
     # Check if VIN or plate already exists
     if controller.find_by_vin(data['vin']):
@@ -96,7 +96,7 @@ def update_vehicle(vehicle_id):
     if not data:
         return jsonify({'error': 'No data provided'}), 400
 
-    controller = VehicleController(SessionLocal())
+    controller = VehicleController(db.session)
     vehicle = controller.find_by_id(vehicle_id)
 
     if not vehicle:
@@ -123,7 +123,7 @@ def delete_vehicle(vehicle_id):
     """
     DELETE /api/vehicles/<id> - Delete a vehicle
     """
-    controller = VehicleController(SessionLocal())
+    controller = VehicleController(db.session)
     vehicle = controller.find_by_id(vehicle_id)
 
     if not vehicle:
@@ -135,7 +135,7 @@ def delete_vehicle(vehicle_id):
 
 @vehicle_bp.route('/<int:vehicle_id>/rentings', methods=['GET'])
 def get_vehicle_rentings(vehicle_id):
-    controller = VehicleController(SessionLocal())
+    controller = VehicleController(db.session)
     vehicle = controller.find_by_id(vehicle_id)
 
     if not vehicle:
@@ -147,7 +147,7 @@ def get_vehicle_rentings(vehicle_id):
 
 @vehicle_bp.route('/<int:vehicle_id>/parkings', methods=['GET'])
 def get_vehicle_parkings(vehicle_id):
-    controller = VehicleController(SessionLocal())
+    controller = VehicleController(db.session)
     vehicle = controller.find_by_id(vehicle_id)
 
     if not vehicle:

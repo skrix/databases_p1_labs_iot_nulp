@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from config.db import SessionLocal
+from config.db import db
 from controllers.fine_controller import FineController
 from domain.fine import Fine
 
@@ -11,7 +11,7 @@ def get_all_fines():
     """
     GET /api/fines - Get all fines
     """
-    controller = FineController(SessionLocal())
+    controller = FineController(db.session)
     fines = controller.find_all()
     return jsonify([fine.to_dict() for fine in fines]), 200
 
@@ -20,7 +20,7 @@ def get_fine(fine_id):
     """
     GET /api/fines/<id> - Get a fine by ID
     """
-    controller = FineController(SessionLocal())
+    controller = FineController(db.session)
     fine = controller.find_by_id(fine_id)
     if fine:
         return jsonify(fine.to_dict()), 200
@@ -45,7 +45,7 @@ def create_fine():
     if not data or not all(field in data for field in required_fields):
         return jsonify({'error': f'Missing required fields: {", ".join(required_fields)}'}), 400
 
-    controller = FineController(SessionLocal())
+    controller = FineController(db.session)
 
     new_fine = Fine(
         status=data['status'],
@@ -68,7 +68,7 @@ def update_fine(fine_id):
     if not data:
         return jsonify({'error': 'No data provided'}), 400
 
-    controller = FineController(SessionLocal())
+    controller = FineController(db.session)
     fine = controller.find_by_id(fine_id)
 
     if not fine:
@@ -84,7 +84,7 @@ def delete_fine(fine_id):
     """
     DELETE /api/fines/<id> - Delete a fine
     """
-    controller = FineController(SessionLocal())
+    controller = FineController(db.session)
     fine = controller.find_by_id(fine_id)
 
     if not fine:
@@ -96,7 +96,7 @@ def delete_fine(fine_id):
 
 @fine_bp.route('/<int:fine_id>/payments', methods=['GET'])
 def get_fine_payments(fine_id):
-    controller = FineController(SessionLocal())
+    controller = FineController(db.session)
     fine = controller.find_by_id(fine_id)
 
     if not fine:

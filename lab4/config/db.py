@@ -1,6 +1,5 @@
 import os
-from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, scoped_session, sessionmaker
+from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -14,8 +13,5 @@ DB_NAME = os.getenv('DB_NAME', 'sixt_development')
 DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 ECHO_SQL = os.getenv('SQLALCHEMY_ECHO', 'false').lower() == 'true'
-engine = create_engine(DATABASE_URL, echo=ECHO_SQL)
 
-Base = declarative_base()
-
-SessionLocal = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
+db = SQLAlchemy()
