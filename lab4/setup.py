@@ -15,6 +15,7 @@ from domain.parking_vehicle import ParkingVehicle
 from domain.renting_payment import RentingPayment
 from domain.renting_fine import RentingFine
 from domain.fine_payment import FinePayment
+from domain.user_note import UserNote
 
 
 def setup_database():

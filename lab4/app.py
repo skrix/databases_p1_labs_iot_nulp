@@ -10,6 +10,7 @@ from routes.parking_routes import parking_bp
 from routes.renting_routes import renting_bp
 from routes.payment_routes import payment_bp
 from routes.fine_routes import fine_bp
+from routes.user_note_routes import user_note_bp
 
 load_dotenv()
 
