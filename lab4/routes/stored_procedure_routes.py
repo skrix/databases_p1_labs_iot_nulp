@@ -111,3 +111,45 @@ def noname_insert():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
+
+
+@stored_procedure_bp.route('/get-stat', methods=['POST'])
+def get_stat():
+    """
+    POST /api/stored-procedures/get-stat - Execute get_stat stored procedure
+    Calculates statistics (SUM, AVG, COUNT, MIN, MAX) on a column
+    Expected JSON body:
+    {
+        "table": "table_name",
+        "column": "column_name",
+        "stat_type": "SUM|AVG|COUNT|MIN|MAX"
+    }
+    """
+    data = request.get_json()
+
+    required_fields = ['table', 'column', 'stat_type']
+    if not data or not all(field in data for field in required_fields):
+        return jsonify({'error': f'Missing required fields: {", ".join(required_fields)}'}), 400
+
+    # Validate stat_type
+    valid_stats = ['SUM', 'AVG', 'COUNT', 'MIN', 'MAX']
+    if data['stat_type'].upper() not in valid_stats:
+        return jsonify({'error': f'Invalid stat_type. Must be one of: {", ".join(valid_stats)}'}), 400
+
+    controller = StoredProcedureController(db.session)
+
+    try:
+        result = controller.get_stat(
+            table=data['table'],
+            column=data['column'],
+            stat_type=data['stat_type'].upper()
+        )
+        return jsonify({
+            'table': data['table'],
+            'column': data['column'],
+            'stat_type': data['stat_type'].upper(),
+            'result': result
+        }), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 400

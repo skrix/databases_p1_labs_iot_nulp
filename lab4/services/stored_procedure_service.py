@@ -49,3 +49,13 @@ class StoredProcedureService:
         :return: None
         """
         return self._dao.noname_insert(table, column)
+
+    def get_stat(self, table: str, column: str, stat_type: str):
+        """
+        Calculates statistics on a column via stored procedure.
+        :param table: table name
+        :param column: column name to calculate stat on
+        :param stat_type: type of statistic (SUM, AVG, COUNT, MIN, MAX)
+        :return: Decimal value of the calculated statistic
+        """
+        return self._dao.get_stat(table, column, stat_type)

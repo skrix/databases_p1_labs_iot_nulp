@@ -73,3 +73,20 @@ class StoredProcedureDAO:
             'p_column': column
         })
         self._session.commit()
+
+    def get_stat(self, table: str, column: str, stat_type: str):
+        """
+        Calls the get_stat stored procedure to calculate statistics.
+        :param table: table name
+        :param column: column name to calculate stat on
+        :param stat_type: type of statistic (SUM, AVG, COUNT, MIN, MAX)
+        :return: Decimal value of the calculated statistic
+        """
+        sql = text("CALL get_stat(:p_table, :p_column, :p_stat)")
+        result = self._session.execute(sql, {
+            'p_table': table,
+            'p_column': column,
+            'p_stat': stat_type
+        })
+        row = result.fetchone()
+        return float(row[0]) if row else None
