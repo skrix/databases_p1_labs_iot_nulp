@@ -81,3 +81,33 @@ def m2m_insert():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
+
+
+@stored_procedure_bp.route('/noname-insert', methods=['POST'])
+def noname_insert():
+    """
+    POST /api/stored-procedures/noname-insert - Execute noname_insert stored procedure
+    Inserts 10 rows with values 'Noname1' through 'Noname10'
+    Expected JSON body:
+    {
+        "table": "table_name",
+        "column": "column_name"
+    }
+    """
+    data = request.get_json()
+
+    required_fields = ['table', 'column']
+    if not data or not all(field in data for field in required_fields):
+        return jsonify({'error': f'Missing required fields: {", ".join(required_fields)}'}), 400
+
+    controller = StoredProcedureController(db.session)
+
+    try:
+        controller.noname_insert(
+            table=data['table'],
+            column=data['column']
+        )
+        return jsonify({'message': '10 Noname rows inserted successfully'}), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 400

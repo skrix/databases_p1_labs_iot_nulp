@@ -58,3 +58,18 @@ class StoredProcedureDAO:
             'p_right_fk': right_fk
         })
         self._session.commit()
+
+    def noname_insert(self, table: str, column: str):
+        """
+        Calls the noname_insert stored procedure.
+        Inserts 10 rows with values 'Noname1' through 'Noname10'.
+        :param table: table name
+        :param column: column name to insert into
+        :return: None
+        """
+        sql = text("CALL noname_insert(:p_table, :p_column)")
+        self._session.execute(sql, {
+            'p_table': table,
+            'p_column': column
+        })
+        self._session.commit()

@@ -40,3 +40,12 @@ class StoredProcedureController:
             right_table, right_lookup_col, right_lookup_val,
             join_table, left_fk, right_fk
         )
+
+    def noname_insert(self, table: str, column: str):
+        """
+        Inserts 10 'Noname' rows via stored procedure.
+        :param table: table name
+        :param column: column name to insert into
+        :return: None
+        """
+        return self._service.noname_insert(table, column)
