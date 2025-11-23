@@ -153,3 +153,41 @@ def get_stat():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
+
+
+@stored_procedure_bp.route('/split-table', methods=['POST'])
+def split_table():
+    """
+    POST /api/stored-procedures/split-table - Execute split_table_random stored procedure
+    Splits a table randomly into two new tables with timestamp suffixes
+    Expected JSON body:
+    {
+        "table": "table_name"
+    }
+    """
+    data = request.get_json()
+
+    required_fields = ['table']
+    if not data or not all(field in data for field in required_fields):
+        return jsonify({'error': f'Missing required fields: {", ".join(required_fields)}'}), 400
+
+    controller = StoredProcedureController(db.session)
+
+    try:
+        controller.split_table_random(table=data['table'])
+
+        # Get timestamp for new table names
+        import time
+        ts = int(time.time())
+
+        return jsonify({
+            'message': 'Table split successfully',
+            'original_table': data['table'],
+            'new_tables': [
+                f"{data['table']}_clone_{ts}_1",
+                f"{data['table']}_clone_{ts}_2"
+            ]
+        }), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 400

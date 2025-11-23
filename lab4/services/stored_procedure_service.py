@@ -59,3 +59,11 @@ class StoredProcedureService:
         :return: Decimal value of the calculated statistic
         """
         return self._dao.get_stat(table, column, stat_type)
+
+    def split_table_random(self, table: str):
+        """
+        Splits a table randomly into two new tables via stored procedure.
+        :param table: table name to split (must have 'id' column)
+        :return: None
+        """
+        return self._dao.split_table_random(table)

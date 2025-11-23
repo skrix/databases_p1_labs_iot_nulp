@@ -90,3 +90,14 @@ class StoredProcedureDAO:
         })
         row = result.fetchone()
         return float(row[0]) if row else None
+
+    def split_table_random(self, table: str):
+        """
+        Calls the split_table_random stored procedure.
+        Splits a table randomly into two new tables with timestamp suffixes.
+        :param table: table name to split (must have 'id' column)
+        :return: None
+        """
+        sql = text("CALL split_table_random(:p_table)")
+        self._session.execute(sql, {'p_table': table})
+        self._session.commit()
