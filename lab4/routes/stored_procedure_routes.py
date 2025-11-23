@@ -34,3 +34,50 @@ def generic_insert():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
+
+
+@stored_procedure_bp.route('/m2m-insert', methods=['POST'])
+def m2m_insert():
+    """
+    POST /api/stored-procedures/m2m-insert - Execute join_insert stored procedure
+    Expected JSON body:
+    {
+        "left_table": "table_name",
+        "left_lookup_col": "column_name",
+        "left_lookup_val": "value",
+        "right_table": "table_name",
+        "right_lookup_col": "column_name",
+        "right_lookup_val": "value",
+        "join_table": "join_table_name",
+        "left_fk": "left_fk_column",
+        "right_fk": "right_fk_column"
+    }
+    """
+    data = request.get_json()
+
+    required_fields = [
+        'left_table', 'left_lookup_col', 'left_lookup_val',
+        'right_table', 'right_lookup_col', 'right_lookup_val',
+        'join_table', 'left_fk', 'right_fk'
+    ]
+    if not data or not all(field in data for field in required_fields):
+        return jsonify({'error': f'Missing required fields: {", ".join(required_fields)}'}), 400
+
+    controller = StoredProcedureController(db.session)
+
+    try:
+        controller.join_insert(
+            left_table=data['left_table'],
+            left_lookup_col=data['left_lookup_col'],
+            left_lookup_val=data['left_lookup_val'],
+            right_table=data['right_table'],
+            right_lookup_col=data['right_lookup_col'],
+            right_lookup_val=data['right_lookup_val'],
+            join_table=data['join_table'],
+            left_fk=data['left_fk'],
+            right_fk=data['right_fk']
+        )
+        return jsonify({'message': 'M2M relation created successfully'}), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 400
