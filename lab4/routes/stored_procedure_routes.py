@@ -25,21 +25,24 @@ def generic_insert():
     controller = StoredProcedureController(db.session)
 
     try:
-        controller.generic_insert(
+        result = controller.generic_insert(
             table=data['table'],
             columns=data['columns'],
             values=data['values']
         )
-        return jsonify({'message': 'Insert successful'}), 201
+        if result:
+            return jsonify(result), 201
+        else:
+            return jsonify({'error': 'No result returned from stored procedure'}), 500
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
 
 
-@stored_procedure_bp.route('/m2m-insert', methods=['POST'])
+@stored_procedure_bp.route('/join_insert', methods=['POST'])
 def m2m_insert():
     """
-    POST /api/stored-procedures/m2m-insert - Execute join_insert stored procedure
+    POST /api/stored-procedures/join_insert - Execute join_insert stored procedure
     Expected JSON body:
     {
         "left_table": "table_name",
@@ -66,7 +69,7 @@ def m2m_insert():
     controller = StoredProcedureController(db.session)
 
     try:
-        controller.join_insert(
+        result = controller.join_insert(
             left_table=data['left_table'],
             left_lookup_col=data['left_lookup_col'],
             left_lookup_val=data['left_lookup_val'],
@@ -77,37 +80,10 @@ def m2m_insert():
             left_fk=data['left_fk'],
             right_fk=data['right_fk']
         )
-        return jsonify({'message': 'M2M relation created successfully'}), 201
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': str(e)}), 400
-
-
-@stored_procedure_bp.route('/noname-insert', methods=['POST'])
-def noname_insert():
-    """
-    POST /api/stored-procedures/noname-insert - Execute noname_insert stored procedure
-    Inserts 10 rows with values 'Noname1' through 'Noname10'
-    Expected JSON body:
-    {
-        "table": "table_name",
-        "column": "column_name"
-    }
-    """
-    data = request.get_json()
-
-    required_fields = ['table', 'column']
-    if not data or not all(field in data for field in required_fields):
-        return jsonify({'error': f'Missing required fields: {", ".join(required_fields)}'}), 400
-
-    controller = StoredProcedureController(db.session)
-
-    try:
-        controller.noname_insert(
-            table=data['table'],
-            column=data['column']
-        )
-        return jsonify({'message': '10 Noname rows inserted successfully'}), 201
+        if result:
+            return jsonify(result), 201
+        else:
+            return jsonify({'error': 'No result returned from stored procedure'}), 500
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
@@ -174,20 +150,11 @@ def split_table():
     controller = StoredProcedureController(db.session)
 
     try:
-        controller.split_table_random(table=data['table'])
-
-        # Get timestamp for new table names
-        import time
-        ts = int(time.time())
-
-        return jsonify({
-            'message': 'Table split successfully',
-            'original_table': data['table'],
-            'new_tables': [
-                f"{data['table']}_clone_{ts}_1",
-                f"{data['table']}_clone_{ts}_2"
-            ]
-        }), 201
+        result = controller.split_table_random(table=data['table'])
+        if result:
+            return jsonify(result), 201
+        else:
+            return jsonify({'error': 'No result returned from stored procedure'}), 500
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400

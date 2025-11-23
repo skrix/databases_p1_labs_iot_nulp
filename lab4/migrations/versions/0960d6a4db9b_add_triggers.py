@@ -22,9 +22,9 @@ def upgrade():
     BEFORE INSERT ON vehicles
     FOR EACH ROW
     BEGIN
-        IF CHAR_LENGTH(NEW.plate) < 2 OR CHAR_LENGTH(NEW.plate) > 6 THEN
+        IF CHAR_LENGTH(NEW.plate) < 2 OR CHAR_LENGTH(NEW.plate) > 10 THEN
             SIGNAL SQLSTATE '45000'
-                SET MESSAGE_TEXT = 'Vehicle plate must be 2 to 6 characters long';
+                SET MESSAGE_TEXT = 'Vehicle plate must be 2 to 10 characters long';
         END IF;
     END;
     """)
@@ -34,20 +34,21 @@ def upgrade():
     BEFORE UPDATE ON vehicles
     FOR EACH ROW
     BEGIN
-        IF CHAR_LENGTH(NEW.plate) < 2 OR CHAR_LENGTH(NEW.plate) > 6 THEN
+        IF CHAR_LENGTH(NEW.plate) < 2 OR CHAR_LENGTH(NEW.plate) > 10 THEN
             SIGNAL SQLSTATE '45000'
-                SET MESSAGE_TEXT = 'Vehicle plate must be 2 to 6 characters long';
+                SET MESSAGE_TEXT = 'Vehicle plate must be 2 to 10 characters long';
         END IF;
     END;
     """)
 
-    # users.driver_license - format <2 letters (not M,R)> - <3 digits> - <2 digits>
+    # АВЕ-123-456
+    # users.driver_license - format <3 letters (not M,R)> - <3 digits> - <3 digits>
     op.execute("""
     CREATE TRIGGER trg_driver_license_format_insert
     BEFORE INSERT ON users
     FOR EACH ROW
     BEGIN
-        IF NEW.driver_license NOT REGEXP '^[A-LN-QS-Z]{2}-[0-9]{3}-[0-9]{2}$' THEN
+        IF NEW.driver_license NOT REGEXP '^[A-LN-QS-Z]{3}-[0-9]{3}-[0-9]{3}$' THEN
             SIGNAL SQLSTATE '45000'
                 SET MESSAGE_TEXT = 'Invalid driver_license format';
         END IF;
@@ -59,7 +60,7 @@ def upgrade():
     BEFORE UPDATE ON users
     FOR EACH ROW
     BEGIN
-        IF NEW.driver_license NOT REGEXP '^[A-LN-QS-Z]{2}-[0-9]{3}-[0-9]{2}$' THEN
+        IF NEW.driver_license NOT REGEXP '^[A-LN-QS-Z]{3}-[0-9]{3}-[0-9]{3}$' THEN
             SIGNAL SQLSTATE '45000'
                 SET MESSAGE_TEXT = 'Invalid driver_license format';
         END IF;

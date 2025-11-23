@@ -89,6 +89,13 @@ def upgrade():
         EXECUTE stmt_insert;
         DEALLOCATE PREPARE stmt_insert;
 
+        SELECT
+            'success' AS status,
+            CONCAT('Successfully created relation between ', p_left_table, ' (id=', v_left_id, ') and ', p_right_table, ' (id=', v_right_id, ')') AS message,
+            v_left_id AS left_id,
+            v_right_id AS right_id,
+            p_join_table AS join_table;
+
     END
     """)
 

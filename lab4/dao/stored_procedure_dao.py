@@ -15,15 +15,25 @@ class StoredProcedureDAO:
         :param table: table name
         :param columns: comma-separated column names
         :param values: comma-separated values (quoted as needed)
-        :return: None
+        :return: Dict containing status, message, rows_affected, and table_name
         """
         sql = text("CALL generic_insert(:p_table, :p_columns, :p_values)")
-        self._session.execute(sql, {
+        result = self._session.execute(sql, {
             'p_table': table,
             'p_columns': columns,
             'p_values': values
         })
+        row = result.fetchone()
         self._session.commit()
+
+        if row:
+            return {
+                'status': row[0],
+                'message': row[1],
+                'rows_affected': row[2],
+                'table_name': row[3]
+            }
+        return None
 
     def join_insert(self, left_table: str, left_lookup_col: str, left_lookup_val: str,
                         right_table: str, right_lookup_col: str, right_lookup_val: str,
@@ -39,14 +49,14 @@ class StoredProcedureDAO:
         :param join_table: M2M join table name
         :param left_fk: foreign key column for left entity
         :param right_fk: foreign key column for right entity
-        :return: None
+        :return: Dict containing status, message, left_id, right_id, and join_table
         """
         sql = text("""CALL join_insert(
             :p_left_table, :p_left_lookup_col, :p_left_lookup_val,
             :p_right_table, :p_right_lookup_col, :p_right_lookup_val,
             :p_join_table, :p_left_fk, :p_right_fk
         )""")
-        self._session.execute(sql, {
+        result = self._session.execute(sql, {
             'p_left_table': left_table,
             'p_left_lookup_col': left_lookup_col,
             'p_left_lookup_val': left_lookup_val,
@@ -57,22 +67,18 @@ class StoredProcedureDAO:
             'p_left_fk': left_fk,
             'p_right_fk': right_fk
         })
+        row = result.fetchone()
         self._session.commit()
 
-    def noname_insert(self, table: str, column: str):
-        """
-        Calls the noname_insert stored procedure.
-        Inserts 10 rows with values 'Noname1' through 'Noname10'.
-        :param table: table name
-        :param column: column name to insert into
-        :return: None
-        """
-        sql = text("CALL noname_insert(:p_table, :p_column)")
-        self._session.execute(sql, {
-            'p_table': table,
-            'p_column': column
-        })
-        self._session.commit()
+        if row:
+            return {
+                'status': row[0],
+                'message': row[1],
+                'left_id': row[2],
+                'right_id': row[3],
+                'join_table': row[4]
+            }
+        return None
 
     def get_stat(self, table: str, column: str, stat_type: str):
         """
@@ -96,8 +102,21 @@ class StoredProcedureDAO:
         Calls the split_table_random stored procedure.
         Splits a table randomly into two new tables with timestamp suffixes.
         :param table: table name to split (must have 'id' column)
-        :return: None
+        :return: Dict containing status, message, original_table, table names and row counts
         """
         sql = text("CALL split_table_random(:p_table)")
-        self._session.execute(sql, {'p_table': table})
+        result = self._session.execute(sql, {'p_table': table})
+        row = result.fetchone()
         self._session.commit()
+
+        if row:
+            return {
+                'status': row[0],
+                'message': row[1],
+                'original_table': row[2],
+                'table1_name': row[3],
+                'table1_rows': row[4],
+                'table2_name': row[5],
+                'table2_rows': row[6]
+            }
+        return None

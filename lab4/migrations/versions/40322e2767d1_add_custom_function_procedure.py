@@ -1,7 +1,7 @@
 """add custom function procedure
 
 Revision ID: 40322e2767d1
-Revises: 779dd49e80e0
+Revises: b9c52d77ecbd
 Create Date: 2025-11-23 17:55:35.330852
 
 """
@@ -11,7 +11,7 @@ from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
 revision = '40322e2767d1'
-down_revision = '779dd49e80e0'
+down_revision = 'b9c52d77ecbd'
 branch_labels = None
 depends_on = None
 

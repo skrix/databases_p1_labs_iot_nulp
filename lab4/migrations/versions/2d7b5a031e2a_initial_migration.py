@@ -257,21 +257,21 @@ def upgrade():
 
     op.execute("""
       INSERT INTO `users` (`first_name`, `middle_name`, `last_name`, `dob`, `email`, `password`, `driver_license`, `gender`) VALUES
-      ('Олександр', 'Іванович', 'Шевченко', '1985-03-15', 'o.shevchenko@email.com', SHA2('password123', 256), 'АВЕ123456', 'male'),
-      ('Олена', 'Петрівна', 'Коваленко', '1990-07-22', 'o.kovalenko@email.com', SHA2('password123', 256), 'АВЕ223456', 'female'),
-      ('Дмитро', 'Сергійович', 'Мельник', '1982-11-08', 'd.melnyk@email.com', SHA2('password123', 256), 'АВЕ323456', 'male'),
-      ('Марія', 'Андріївна', 'Бондаренко', '1995-04-30', 'm.bondarenko@email.com', SHA2('password123', 256), 'АВЕ423456', 'female'),
-      ('Андрій', 'Миколайович', 'Ткаченко', '1988-09-12', 'a.tkachenko@email.com', SHA2('password123', 256), 'АВЕ523456', 'male'),
-      ('Юлія', 'Олександрівна', 'Кравченко', '1992-01-25', 'y.kravchenko@email.com', SHA2('password123', 256), 'АВЕ623456', 'female'),
-      ('Віктор', 'Васильович', 'Гончаренко', '1987-06-18', 'v.honcharenko@email.com', SHA2('password123', 256), 'АВЕ723456', 'male'),
-      ('Тетяна', 'Володимирівна', 'Павленко', '1993-12-05', 't.pavlenko@email.com', SHA2('password123', 256), 'АВЕ823456', 'female'),
-      ('Максим', 'Ігорович', 'Савченко', '1984-08-28', 'm.savchenko@email.com', SHA2('password123', 256), 'АВЕ923456', 'male'),
-      ('Наталія', 'Олегівна', 'Романенко', '1991-02-14', 'n.romanenko@email.com', SHA2('password123', 256), 'АВЕ023456', 'female'),
-      ('Сергій', 'Анатолійович', 'Лисенко', '1989-10-03', 's.lysenko@email.com', SHA2('password123', 256), 'АВЕ033456', 'male'),
-      ('Анна', 'Михайлівна', 'Поліщук', '1994-05-19', 'a.polischuk@email.com', SHA2('password123', 256), 'АВЕ043456', 'female'),
-      ('Ігор', 'Романович', 'Коваль', '1986-07-07', 'i.koval@email.com', SHA2('password123', 256), 'АВЕ053456', 'male'),
-      ('Катерина', 'Ярославівна', 'Захарченко', '1996-11-22', 'k.zakharchenko@email.com', SHA2('password123', 256), 'АВЕ063456', 'female'),
-      ('Володимир', 'Богданович', 'Білоус', '1983-03-11', 'v.bilous@email.com', SHA2('password123', 256), 'АВЕ073456', 'male');
+      ('Олександр', 'Іванович', 'Шевченко', '1985-03-15', 'o.shevchenko@email.com', SHA2('password123', 256), 'ABC-123-456', 'male'),
+      ('Олена', 'Петрівна', 'Коваленко', '1990-07-22', 'o.kovalenko@email.com', SHA2('password123', 256), 'ABC-223-456', 'female'),
+      ('Дмитро', 'Сергійович', 'Мельник', '1982-11-08', 'd.melnyk@email.com', SHA2('password123', 256), 'ABC-323-456', 'male'),
+      ('Марія', 'Андріївна', 'Бондаренко', '1995-04-30', 'm.bondarenko@email.com', SHA2('password123', 256), 'ABC-423-456', 'female'),
+      ('Андрій', 'Миколайович', 'Ткаченко', '1988-09-12', 'a.tkachenko@email.com', SHA2('password123', 256), 'ABC-523-456', 'male'),
+      ('Юлія', 'Олександрівна', 'Кравченко', '1992-01-25', 'y.kravchenko@email.com', SHA2('password123', 256), 'ABC-623-456', 'female'),
+      ('Віктор', 'Васильович', 'Гончаренко', '1987-06-18', 'v.honcharenko@email.com', SHA2('password123', 256), 'ABC-723-456', 'male'),
+      ('Тетяна', 'Володимирівна', 'Павленко', '1993-12-05', 't.pavlenko@email.com', SHA2('password123', 256), 'ABC-823-456', 'female'),
+      ('Максим', 'Ігорович', 'Савченко', '1984-08-28', 'm.savchenko@email.com', SHA2('password123', 256), 'ABC-923-456', 'male'),
+      ('Наталія', 'Олегівна', 'Романенко', '1991-02-14', 'n.romanenko@email.com', SHA2('password123', 256), 'DEF-123-456', 'female'),
+      ('Сергій', 'Анатолійович', 'Лисенко', '1989-10-03', 's.lysenko@email.com', SHA2('password123', 256), 'DEF-223-456', 'male'),
+      ('Анна', 'Михайлівна', 'Поліщук', '1994-05-19', 'a.polischuk@email.com', SHA2('password123', 256), 'DEF-323-456', 'female'),
+      ('Ігор', 'Романович', 'Коваль', '1986-07-07', 'i.koval@email.com', SHA2('password123', 256), 'DEF-423-456', 'male'),
+      ('Катерина', 'Ярославівна', 'Захарченко', '1996-11-22', 'k.zakharchenko@email.com', SHA2('password123', 256), 'DEF-523-456', 'female'),
+      ('Володимир', 'Богданович', 'Білоус', '1983-03-11', 'v.bilous@email.com', SHA2('password123', 256), 'DEF-623-456', 'male');
     """)
 
     op.execute("""

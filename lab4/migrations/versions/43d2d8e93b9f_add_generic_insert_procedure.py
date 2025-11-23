@@ -24,6 +24,8 @@ def upgrade():
           IN p_values TEXT
       )
       BEGIN
+          DECLARE v_rows_affected INT DEFAULT 0;
+
           SET @sql = CONCAT(
               'INSERT INTO ', p_table, ' (', p_columns, ') ',
               'VALUES (', p_values, ');'
@@ -31,7 +33,14 @@ def upgrade():
 
           PREPARE stmt FROM @sql;
           EXECUTE stmt;
+          SET v_rows_affected = ROW_COUNT();
           DEALLOCATE PREPARE stmt;
+
+          SELECT
+              'success' AS status,
+              CONCAT('Successfully inserted ', v_rows_affected, ' row(s) into ', p_table) AS message,
+              v_rows_affected AS rows_affected,
+              p_table AS table_name;
       END
     """)
 

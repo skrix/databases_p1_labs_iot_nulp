@@ -25,6 +25,8 @@ def upgrade():
         DECLARE v_id INT;
         DECLARE done INT DEFAULT FALSE;
         DECLARE ts VARCHAR(20);
+        DECLARE v_count_t1 INT DEFAULT 0;
+        DECLARE v_count_t2 INT DEFAULT 0;
 
         -- Generate timestamp suffix
         SET ts = UNIX_TIMESTAMP();
@@ -87,6 +89,29 @@ def upgrade():
         END;
 
         DROP TEMPORARY TABLE IF EXISTS tmp_ids;
+
+        -- Get counts from both tables
+        SET @sql_count1 = CONCAT('SELECT COUNT(*) INTO @cnt1 FROM ', @t1);
+        PREPARE stmt_count1 FROM @sql_count1;
+        EXECUTE stmt_count1;
+        DEALLOCATE PREPARE stmt_count1;
+
+        SET @sql_count2 = CONCAT('SELECT COUNT(*) INTO @cnt2 FROM ', @t2);
+        PREPARE stmt_count2 FROM @sql_count2;
+        EXECUTE stmt_count2;
+        DEALLOCATE PREPARE stmt_count2;
+
+        SET v_count_t1 = @cnt1;
+        SET v_count_t2 = @cnt2;
+
+        SELECT
+            'success' AS status,
+            CONCAT('Successfully split table ', p_parent_table, ' into 2 tables') AS message,
+            p_parent_table AS original_table,
+            @t1 AS table1_name,
+            v_count_t1 AS table1_rows,
+            @t2 AS table2_name,
+            v_count_t2 AS table2_rows;
     END
     """)
 
