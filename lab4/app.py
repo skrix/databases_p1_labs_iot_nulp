@@ -11,6 +11,7 @@ from routes.renting_routes import renting_bp
 from routes.payment_routes import payment_bp
 from routes.fine_routes import fine_bp
 from routes.user_note_routes import user_note_bp
+from routes.stored_procedure_routes import stored_procedure_bp
 
 load_dotenv()
 
@@ -39,6 +40,8 @@ def create_app():
     app.register_blueprint(renting_bp)
     app.register_blueprint(payment_bp)
     app.register_blueprint(fine_bp)
+    app.register_blueprint(user_note_bp)
+    app.register_blueprint(stored_procedure_bp)
 
     @app.teardown_appcontext
     def remove_session(exception=None):
