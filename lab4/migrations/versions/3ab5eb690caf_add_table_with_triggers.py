@@ -17,7 +17,6 @@ depends_on = None
 
 
 def upgrade():
-
     # 1. Create table without foreign keys
     op.execute("""
         CREATE TABLE user_notes (
