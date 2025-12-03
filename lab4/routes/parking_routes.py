@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from config.db import SessionLocal
+from config.db import db
 from controllers.parking_controller import ParkingController
 from domain.parking import Parking
 
@@ -11,7 +11,7 @@ def get_all_parkings():
     """
     GET /api/parkings - Get all parkings
     """
-    controller = ParkingController(SessionLocal())
+    controller = ParkingController(db.session)
     parkings = controller.find_all()
     return jsonify([parking.to_dict() for parking in parkings]), 200
 
@@ -21,7 +21,7 @@ def get_parking(parking_id):
     """
     GET /api/parkings/<id> - Get a parking by ID
     """
-    controller = ParkingController(SessionLocal())
+    controller = ParkingController(db.session)
     parking = controller.find_by_id(parking_id)
     if parking:
         return jsonify(parking.to_dict()), 200
@@ -47,7 +47,7 @@ def create_parking():
     if not data or not all(field in data for field in required_fields):
         return jsonify({'error': f'Missing required fields: {", ".join(required_fields)}'}), 400
 
-    controller = ParkingController(SessionLocal())
+    controller = ParkingController(db.session)
     new_parking = Parking(
         address=data.get('address'),
         country=data.get('country'),
@@ -70,7 +70,7 @@ def update_parking(parking_id):
     if not data:
         return jsonify({'error': 'No data provided'}), 400
 
-    controller = ParkingController(SessionLocal())
+    controller = ParkingController(db.session)
     parking = controller.find_by_id(parking_id)
 
     if not parking:
@@ -86,7 +86,7 @@ def delete_parking(parking_id):
     """
     DELETE /api/parkings/<id> - Delete a parking
     """
-    controller = ParkingController(SessionLocal())
+    controller = ParkingController(db.session)
     parking = controller.find_by_id(parking_id)
 
     if not parking:
@@ -98,7 +98,7 @@ def delete_parking(parking_id):
 
 @parking_bp.route('/<int:parking_id>/vehicles', methods=['GET'])
 def get_parking_vehicles(parking_id):
-    controller = ParkingController(SessionLocal())
+    controller = ParkingController(db.session)
     parking = controller.find_by_id(parking_id)
 
     if not parking:

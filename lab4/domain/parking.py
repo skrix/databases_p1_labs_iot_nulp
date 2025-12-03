@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String, DECIMAL
-from config.db import Base
+from config.db import db
 
 
-class Parking(Base):
+class Parking(db.Model):
     """
     Parking model representing a parking location in the database.
     """

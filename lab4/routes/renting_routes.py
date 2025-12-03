@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from config.db import SessionLocal
+from config.db import db
 from controllers.renting_controller import RentingController
 from domain.renting import Renting
 
@@ -13,7 +13,7 @@ def get_all_rentings():
     Query parameters:
     - nested: if 'true', includes nested user, vehicle, fines, and payments
     """
-    controller = RentingController(SessionLocal())
+    controller = RentingController(db.session)
     include_nested = request.args.get('nested', 'false').lower() == 'true'
 
     if include_nested:
@@ -31,7 +31,7 @@ def get_renting(renting_id):
     Query parameters:
     - nested: if 'true', includes nested user, vehicle, fines, and payments
     """
-    controller = RentingController(SessionLocal())
+    controller = RentingController(db.session)
     include_nested = request.args.get('nested', 'false').lower() == 'true'
 
     if include_nested:
@@ -62,7 +62,7 @@ def create_renting():
     if not data or not all(field in data for field in required_fields):
         return jsonify({'error': f'Missing required fields: {", ".join(required_fields)}'}), 400
 
-    controller = RentingController(SessionLocal())
+    controller = RentingController(db.session)
     new_renting = Renting(
         user_id=data['user_id'],
         vehicle_id=data['vehicle_id'],
@@ -84,7 +84,7 @@ def update_renting(renting_id):
     if not data:
         return jsonify({'error': 'No data provided'}), 400
 
-    controller = RentingController(SessionLocal())
+    controller = RentingController(db.session)
     renting = controller.find_by_id(renting_id)
 
     if not renting:
@@ -100,7 +100,7 @@ def delete_renting(renting_id):
     """
     DELETE /api/rentings/<id> - Delete a renting
     """
-    controller = RentingController(SessionLocal())
+    controller = RentingController(db.session)
     renting = controller.find_by_id(renting_id)
 
     if not renting:
@@ -112,7 +112,7 @@ def delete_renting(renting_id):
 
 @renting_bp.route('/<int:renting_id>/fines', methods=['GET'])
 def get_renting_fines(renting_id):
-    controller = RentingController(SessionLocal())
+    controller = RentingController(db.session)
     renting = controller.find_by_id(renting_id)
 
     if not renting:
@@ -124,7 +124,7 @@ def get_renting_fines(renting_id):
 
 @renting_bp.route('/<int:renting_id>/payments', methods=['GET'])
 def get_renting_payments(renting_id):
-    controller = RentingController(SessionLocal())
+    controller = RentingController(db.session)
     renting = controller.find_by_id(renting_id)
 
     if not renting:

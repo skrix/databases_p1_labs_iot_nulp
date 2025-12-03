@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, String, Enum, DECIMAL, TIMESTAMP
 from sqlalchemy.sql import func
-from config.db import Base
+from config.db import db
 
 
-class Fine(Base):
+class Fine(db.Model):
     """
     Fine model representing a traffic fine in the database.
     """

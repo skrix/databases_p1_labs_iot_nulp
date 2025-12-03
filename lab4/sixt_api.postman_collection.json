@@ -765,6 +765,753 @@
 			]
 		},
 		{
+			"name": "User Notes",
+			"item": [
+				{
+					"name": "Get All User Notes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/user-notes",
+							"host": ["{{base_url}}"],
+							"path": ["api", "user-notes"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Note by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/user-notes/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "user-notes", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Notes by User ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/user-notes/user/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "user-notes", "user", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User Note",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": 1,\n    \"note\": \"This is a sample note for the user\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/user-notes",
+							"host": ["{{base_url}}"],
+							"path": ["api", "user-notes"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Note",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"note\": \"Updated note content\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/user-notes/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "user-notes", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User Note",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/user-notes/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "user-notes", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Stored Procedures",
+			"item": [
+				{
+					"name": "Generic Insert",
+					"item": [
+						{
+							"name": "Insert into Users",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"users\",\n    \"columns\": \"first_name, last_name, email, password, driver_license, gender, dob\",\n    \"values\": \"'Jane', 'Doe', 'jane.doe@test.com', 'password123', 'XYZ-789-012', 'female', '1992-03-15'\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/generic-insert",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "generic-insert"]
+								},
+								"description": "Insert a new user using generic_insert stored procedure"
+							},
+							"response": []
+						},
+						{
+							"name": "Insert into Vehicles",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"vehicles\",\n    \"columns\": \"make, model, year, vin, body, plate\",\n    \"values\": \"'Mercedes', 'C-Class', 2024, 'WDD12345678901234', 'sedan', 'MERC-C24'\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/generic-insert",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "generic-insert"]
+								},
+								"description": "Insert a new vehicle using generic_insert stored procedure"
+							},
+							"response": []
+						},
+						{
+							"name": "Insert into Parkings",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"parkings\",\n    \"columns\": \"address, country, city, latitude, longitude\",\n    \"values\": \"'789 Maple Street', 'USA', 'San Francisco', 37.7749, -122.4194\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/generic-insert",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "generic-insert"]
+								},
+								"description": "Insert a new parking using generic_insert stored procedure"
+							},
+							"response": []
+						},
+						{
+							"name": "Insert into Rentings",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"rentings\",\n    \"columns\": \"user_id, vehicle_id, start_at, end_at\",\n    \"values\": \"2, 2, '2025-12-10 14:00:00', '2025-12-15 14:00:00'\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/generic-insert",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "generic-insert"]
+								},
+								"description": "Insert a new renting using generic_insert stored procedure"
+							},
+							"response": []
+						},
+						{
+							"name": "Insert into Payments",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"payments\",\n    \"columns\": \"status, amount, currency\",\n    \"values\": \"'completed', 350.00, 'USD'\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/generic-insert",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "generic-insert"]
+								},
+								"description": "Insert a new payment using generic_insert stored procedure"
+							},
+							"response": []
+						},
+						{
+							"name": "Insert into Fines",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"fines\",\n    \"columns\": \"status, amount, currency, violation\",\n    \"values\": \"'unpaid', 200.00, 'USD', 'Speeding - 20 mph over limit'\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/generic-insert",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "generic-insert"]
+								},
+								"description": "Insert a new fine using generic_insert stored procedure"
+							},
+							"response": []
+						},
+						{
+							"name": "Insert into User Notes",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"user_notes\",\n    \"columns\": \"user_id, note\",\n    \"values\": \"2, 'Customer prefers sedan vehicles and automatic transmission'\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/generic-insert",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "generic-insert"]
+								},
+								"description": "Insert a new user note using generic_insert stored procedure"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "M2M Insert (Join Insert)",
+					"item": [
+						{
+							"name": "Link Renting to Fine",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"left_table\": \"rentings\",\n    \"left_lookup_col\": \"id\",\n    \"left_lookup_val\": \"1\",\n    \"right_table\": \"fines\",\n    \"right_lookup_col\": \"id\",\n    \"right_lookup_val\": \"2\",\n    \"join_table\": \"rentings_fines\",\n    \"left_fk\": \"renting_id\",\n    \"right_fk\": \"fine_id\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/join_insert",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "join_insert"]
+								},
+								"description": "Link a renting to a fine using join_insert stored procedure"
+							},
+							"response": []
+						},
+						{
+							"name": "Link Renting to Payment",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"left_table\": \"rentings\",\n    \"left_lookup_col\": \"id\",\n    \"left_lookup_val\": \"1\",\n    \"right_table\": \"payments\",\n    \"right_lookup_col\": \"id\",\n    \"right_lookup_val\": \"2\",\n    \"join_table\": \"rentings_payments\",\n    \"left_fk\": \"renting_id\",\n    \"right_fk\": \"payment_id\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/join_insert",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "join_insert"]
+								},
+								"description": "Link a renting to a payment using join_insert stored procedure"
+							},
+							"response": []
+						},
+						{
+							"name": "Link Fine to Payment",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"left_table\": \"fines\",\n    \"left_lookup_col\": \"id\",\n    \"left_lookup_val\": \"2\",\n    \"right_table\": \"payments\",\n    \"right_lookup_col\": \"id\",\n    \"right_lookup_val\": \"2\",\n    \"join_table\": \"fines_payments\",\n    \"left_fk\": \"fine_id\",\n    \"right_fk\": \"payment_id\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/join_insert",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "join_insert"]
+								},
+								"description": "Link a fine to a payment using join_insert stored procedure"
+							},
+							"response": []
+						},
+						{
+							"name": "Link Parking to Vehicle",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"left_table\": \"parkings\",\n    \"left_lookup_col\": \"id\",\n    \"left_lookup_val\": \"1\",\n    \"right_table\": \"vehicles\",\n    \"right_lookup_col\": \"id\",\n    \"right_lookup_val\": \"2\",\n    \"join_table\": \"parkings_vehicles\",\n    \"left_fk\": \"parking_id\",\n    \"right_fk\": \"vehicle_id\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/join_insert",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "join_insert"]
+								},
+								"description": "Link a parking to a vehicle using join_insert stored procedure"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get Statistics",
+					"item": [
+						{
+							"name": "Stats - Payments Amount (AVG)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"payments\",\n    \"column\": \"amount\",\n    \"stat_type\": \"AVG\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/get-stat",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "get-stat"]
+								},
+								"description": "Calculate average payment amount"
+							},
+							"response": []
+						},
+						{
+							"name": "Stats - Payments Amount (SUM)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"payments\",\n    \"column\": \"amount\",\n    \"stat_type\": \"SUM\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/get-stat",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "get-stat"]
+								},
+								"description": "Calculate total payment amount"
+							},
+							"response": []
+						},
+						{
+							"name": "Stats - Fines Amount (MAX)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"fines\",\n    \"column\": \"amount\",\n    \"stat_type\": \"MAX\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/get-stat",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "get-stat"]
+								},
+								"description": "Find maximum fine amount"
+							},
+							"response": []
+						},
+						{
+							"name": "Stats - Fines Amount (MIN)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"fines\",\n    \"column\": \"amount\",\n    \"stat_type\": \"MIN\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/get-stat",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "get-stat"]
+								},
+								"description": "Find minimum fine amount"
+							},
+							"response": []
+						},
+						{
+							"name": "Stats - Users Count",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"users\",\n    \"column\": \"id\",\n    \"stat_type\": \"COUNT\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/get-stat",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "get-stat"]
+								},
+								"description": "Count total number of users"
+							},
+							"response": []
+						},
+						{
+							"name": "Stats - Vehicles Count",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"vehicles\",\n    \"column\": \"id\",\n    \"stat_type\": \"COUNT\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/get-stat",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "get-stat"]
+								},
+								"description": "Count total number of vehicles"
+							},
+							"response": []
+						},
+						{
+							"name": "Stats - Vehicles Year (AVG)",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"vehicles\",\n    \"column\": \"year\",\n    \"stat_type\": \"AVG\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/get-stat",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "get-stat"]
+								},
+								"description": "Calculate average vehicle year"
+							},
+							"response": []
+						},
+						{
+							"name": "Stats - Rentings Count",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"rentings\",\n    \"column\": \"id\",\n    \"stat_type\": \"COUNT\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/get-stat",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "get-stat"]
+								},
+								"description": "Count total number of rentings"
+							},
+							"response": []
+						},
+						{
+							"name": "Stats - Parkings Count",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"parkings\",\n    \"column\": \"id\",\n    \"stat_type\": \"COUNT\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/get-stat",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "get-stat"]
+								},
+								"description": "Count total number of parkings"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Split Table",
+					"item": [
+						{
+							"name": "Split Users Table",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"users\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/split-table",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "split-table"]
+								},
+								"description": "Split users table randomly into two new tables"
+							},
+							"response": []
+						},
+						{
+							"name": "Split Vehicles Table",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"vehicles\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/split-table",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "split-table"]
+								},
+								"description": "Split vehicles table randomly into two new tables"
+							},
+							"response": []
+						},
+						{
+							"name": "Split Parkings Table",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"parkings\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/split-table",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "split-table"]
+								},
+								"description": "Split parkings table randomly into two new tables"
+							},
+							"response": []
+						},
+						{
+							"name": "Split Rentings Table",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"rentings\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/split-table",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "split-table"]
+								},
+								"description": "Split rentings table randomly into two new tables"
+							},
+							"response": []
+						},
+						{
+							"name": "Split Payments Table",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"payments\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/split-table",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "split-table"]
+								},
+								"description": "Split payments table randomly into two new tables"
+							},
+							"response": []
+						},
+						{
+							"name": "Split Fines Table",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"fines\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/split-table",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "split-table"]
+								},
+								"description": "Split fines table randomly into two new tables"
+							},
+							"response": []
+						},
+						{
+							"name": "Split User Notes Table",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"table\": \"user_notes\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/api/stored-procedures/split-table",
+									"host": ["{{base_url}}"],
+									"path": ["api", "stored-procedures", "split-table"]
+								},
+								"description": "Split user_notes table randomly into two new tables"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
 			"name": "Root Endpoint",
 			"request": {
 				"method": "GET",
@@ -773,6 +1520,19 @@
 					"raw": "{{base_url}}/",
 					"host": ["{{base_url}}"],
 					"path": [""]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/health",
+					"host": ["{{base_url}}"],
+					"path": ["health"]
 				}
 			},
 			"response": []

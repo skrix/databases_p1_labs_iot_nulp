@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, ForeignKey, TIMESTAMP
 from sqlalchemy.sql import func
-from config.db import Base
+from config.db import db
 
 
-class RentingFine(Base):
+class RentingFine(db.Model):
     """
     RentingFine model representing the relationship between rentings and fines.
     """

@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, Enum, DECIMAL, TIMESTAMP
 from sqlalchemy.sql import func
-from config.db import Base
+from config.db import db
 
 
-class Payment(Base):
+class Payment(db.Model):
     """
     Payment model representing a payment in the database.
     """

@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, String, Date, Enum, TIMESTAMP
 from sqlalchemy.sql import func
-from config.db import Base
+from config.db import db
 
 
-class User(Base):
+class User(db.Model):
     """
     User model representing a user in the database.
     """

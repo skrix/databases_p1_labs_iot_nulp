@@ -1,14 +1,17 @@
 import os
 import logging
 from flask import Flask, jsonify
+from flask_migrate import Migrate
 from dotenv import load_dotenv
-from config.db import SessionLocal
+from config.db import db, DATABASE_URL, ECHO_SQL
 from routes.user_routes import user_bp
 from routes.vehicle_routes import vehicle_bp
 from routes.parking_routes import parking_bp
 from routes.renting_routes import renting_bp
 from routes.payment_routes import payment_bp
 from routes.fine_routes import fine_bp
+from routes.user_note_routes import user_note_bp
+from routes.stored_procedure_routes import stored_procedure_bp
 
 load_dotenv()
 
@@ -24,6 +27,12 @@ def create_app():
     app = Flask(__name__)
     app.config['JSON_SORT_KEYS'] = False
     app.config['DEBUG'] = os.getenv('FLASK_DEBUG', 'True').lower() == 'true'
+    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+    app.config['SQLALCHEMY_ECHO'] = ECHO_SQL
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    db.init_app(app)
+    migrate = Migrate(app, db)
 
     app.register_blueprint(user_bp)
     app.register_blueprint(vehicle_bp)
@@ -31,10 +40,12 @@ def create_app():
     app.register_blueprint(renting_bp)
     app.register_blueprint(payment_bp)
     app.register_blueprint(fine_bp)
+    app.register_blueprint(user_note_bp)
+    app.register_blueprint(stored_procedure_bp)
 
     @app.teardown_appcontext
     def remove_session(exception=None):
-        SessionLocal.remove()
+        db.session.remove()
 
     @app.errorhandler(404)
     def not_found(error):
@@ -42,13 +53,13 @@ def create_app():
 
     @app.errorhandler(500)
     def internal_error(error):
-        SessionLocal.remove()
+        db.session.remove()
         return jsonify({'error': 'Internal server error'}), 500
 
     @app.errorhandler(Exception)
     def handle_exception(error):
         logger.error(f"Unhandled exception: {str(error)}", exc_info=True)
-        SessionLocal.remove()
+        db.session.remove()
         return jsonify({'error': str(error)}), 500
 
     @app.route('/')

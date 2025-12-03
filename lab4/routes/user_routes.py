@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from config.db import SessionLocal
+from config.db import db
 from controllers.user_controller import UserController
 from domain.user import User
 
@@ -13,7 +13,7 @@ def get_all_users():
     Query parameters:
     - nested: if 'true', includes nested rentings and fines
     """
-    controller = UserController(SessionLocal())
+    controller = UserController(db.session)
     include_nested = request.args.get('nested', 'false').lower() == 'true'
 
     if include_nested:
@@ -31,7 +31,7 @@ def get_user(user_id):
     Query parameters:
     - nested: if 'true', includes nested rentings and fines
     """
-    controller = UserController(SessionLocal())
+    controller = UserController(db.session)
     include_nested = request.args.get('nested', 'false').lower() == 'true'
 
     if include_nested:
@@ -66,7 +66,7 @@ def create_user():
     if not data or not all(field in data for field in required_fields):
         return jsonify({'error': f'Missing required fields: {", ".join(required_fields)}'}), 400
 
-    controller = UserController(SessionLocal())
+    controller = UserController(db.session)
 
     if controller.find_by_email(data['email']):
         return jsonify({'error': 'Email already exists'}), 400
@@ -110,7 +110,7 @@ def update_user(user_id):
     if not data:
         return jsonify({'error': 'No data provided'}), 400
 
-    controller = UserController(SessionLocal())
+    controller = UserController(db.session)
     user = controller.find_by_id(user_id)
 
     if not user:
@@ -137,7 +137,7 @@ def delete_user(user_id):
     """
     DELETE /api/users/<id> - Delete a user
     """
-    controller = UserController(SessionLocal())
+    controller = UserController(db.session)
     user = controller.find_by_id(user_id)
 
     if not user:
@@ -149,7 +149,7 @@ def delete_user(user_id):
 
 @user_bp.route('/<int:user_id>/rentings', methods=['GET'])
 def get_user_rentings(user_id):
-    controller = UserController(SessionLocal())
+    controller = UserController(db.session)
     user = controller.find_by_id(user_id)
 
     if not user:
@@ -161,7 +161,7 @@ def get_user_rentings(user_id):
 
 @user_bp.route('/<int:user_id>/fines', methods=['GET'])
 def get_user_fines(user_id):
-    controller = UserController(SessionLocal())
+    controller = UserController(db.session)
     user = controller.find_by_id(user_id)
 
     if not user:
